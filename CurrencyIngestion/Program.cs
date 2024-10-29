@@ -19,14 +19,14 @@ namespace CurrencyIngestion
 
             ChannelSubscription btcusdSubscription = new()
             {
-                Data = new("live_trades_btcusd")
+                Data = new("diff_order_book_btcusd")
             };
 
             await Subscribe(webSocket, receiveBuffer, btcusdSubscription);
 
             ChannelSubscription ethusdSubscription = new()
             {
-                Data = new("live_trades_ethusd")
+                Data = new("diff_order_book_ethusd")
             };
 
             await Subscribe(webSocket, receiveBuffer, ethusdSubscription);
@@ -34,23 +34,20 @@ namespace CurrencyIngestion
             //Receive data
             var receiveTask = Task.Run(async () =>
             {
-                var buffer = new byte[1024];
+                var buffer = new byte[1024 * 2];
                 while (webSocket.State == WebSocketState.Open)
                 {
-                    WebSocketReceiveResult received = await webSocket.ReceiveAsync(new ArraySegment<byte>(receiveBuffer), CancellationToken.None);
+                    LiveTickerResult? result = await ReceiveMessage(webSocket, receiveBuffer);
 
-                    string receivedMessage = Encoding.UTF8.GetString(receiveBuffer, 0, received.Count);
+                    //if (result is null)
+                    //    break;
 
-                    LiveTickerResult? result = JsonSerializer.Deserialize<LiveTickerResult>(receivedMessage, new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true
-                    });
-                    var liveTicker = result?.Data;
-                    Console.WriteLine("channel: " + result?.Channel);
-                    Console.WriteLine("time: " + liveTicker?.TimeStr);
-                    Console.WriteLine("type: " + liveTicker?.Type);
-                    Console.WriteLine("price: " + liveTicker?.Price);
-                    Console.WriteLine("amount: " + liveTicker?.Amount);
+                    //var liveTicker = result.Data;
+                    //Console.WriteLine("channel: " + result.Channel);
+                    //Console.WriteLine("time: " + liveTicker?.TimeStr);
+                    //Console.WriteLine("type: " + liveTicker?.Type);
+                    //Console.WriteLine("price: " + liveTicker?.Price);
+                    //Console.WriteLine("amount: " + liveTicker?.Amount);
 
                     Console.WriteLine("=======================================");
 
@@ -74,6 +71,29 @@ namespace CurrencyIngestion
             WebSocketReceiveResult result = await webSocket.ReceiveAsync(new ArraySegment<byte>(receiveBuffer), CancellationToken.None);
             string receivedMessage = Encoding.UTF8.GetString(receiveBuffer, 0, result.Count);
             Console.WriteLine("Received: " + receivedMessage);
+        }
+
+        private static async Task<LiveTickerResult?> ReceiveMessage(ClientWebSocket webSocket, byte[] receiveBuffer)
+        {
+            WebSocketReceiveResult received = await webSocket.ReceiveAsync(new ArraySegment<byte>(receiveBuffer), CancellationToken.None);
+
+            if (received.MessageType == WebSocketMessageType.Close)
+            {
+                return null;
+            }
+
+            string receivedMessage = Encoding.UTF8.GetString(receiveBuffer, 0, received.Count);
+
+            Console.WriteLine("Received: " + receivedMessage);
+
+            return null;
+
+            //LiveTickerResult? result = JsonSerializer.Deserialize<LiveTickerResult>(receivedMessage, new JsonSerializerOptions
+            //{
+            //    PropertyNameCaseInsensitive = true
+            //});
+
+            //return result;
         }
     }
 }

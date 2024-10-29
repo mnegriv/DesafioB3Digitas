@@ -8,6 +8,6 @@ namespace CurrencyIngestion.Model
         public string? Event => "bts:subscribe";
 
         [JsonPropertyName("data")]
-        public ChannelData? Data { get; set; }
+        public ChannelData? Data { get; init; }
     }
 }
