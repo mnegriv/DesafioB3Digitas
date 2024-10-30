@@ -12,7 +12,7 @@ namespace CurrencyIngestion.Data
             this.connString = connString ?? throw new ArgumentNullException(nameof(connString));
         }
 
-        public void Save(string orderBook)
+        public async Task Save(string orderBook)
         {
             using var connection = new SqlConnection(connString);
 
@@ -20,7 +20,12 @@ namespace CurrencyIngestion.Data
 
             string sql = "INSERT INTO Currency VALUES (GETDATE(), @orderBook)";
 
-            connection.ExecuteScalar(sql, new { orderBook });
+            await connection.ExecuteScalarAsync(sql, new { orderBook });
+        }
+
+        Task<IEnumerable<string>> ICurrencyRepository.GetAll()
+        {
+            throw new NotImplementedException();
         }
     }
 }

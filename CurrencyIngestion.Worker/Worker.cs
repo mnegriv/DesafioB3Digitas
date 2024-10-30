@@ -1,5 +1,9 @@
+using System.Linq;
 using System.Net.WebSockets;
+using System.Text.Json;
 using CurrencyIngestion.Data;
+using CurrencyIngestion.Model;
+using CurrencyIngestion.Service;
 
 namespace CurrencyIngestion.Worker
 {
@@ -9,10 +13,16 @@ namespace CurrencyIngestion.Worker
 
         private readonly ICurrencyRepository currencyRepository;
 
-        public Worker(ILogger<Worker> logger, ICurrencyRepository currencyRepository)
+        private readonly ICurrencySummaryCalculator currencySummaryCalculator;
+
+        public Worker(
+            ILogger<Worker> logger,
+            ICurrencyRepository currencyRepository,
+            ICurrencySummaryCalculator currencySummaryCalculator)
         {
             this.logger = logger;
             this.currencyRepository = currencyRepository;
+            this.currencySummaryCalculator = currencySummaryCalculator;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -27,9 +37,14 @@ namespace CurrencyIngestion.Worker
             //Receive data
             var receiveTask = Task.Run(async () =>
             {
+                OrderBook? previousOrderBookBtc = null;
+                OrderBook? previousOrderBookEth = null;
+
                 while (bitstampClientWebSocket.CurrentState == WebSocketState.Open 
                         && !stoppingToken.IsCancellationRequested)
                 {
+                    var cumulativeResultsTask = this.currencyRepository.GetAll();
+
                     string? messageReceived = await bitstampClientWebSocket.ReceiveMessage();
 
                     if (messageReceived is null)
@@ -39,7 +54,20 @@ namespace CurrencyIngestion.Worker
                     Console.WriteLine("Received: " + messageReceived);
                     Console.WriteLine("=======================================");
 
-                    currencyRepository.Save(messageReceived);
+                    OrderBook? orderBook = OrderBook.FromJson(messageReceived);
+
+                    var cumulativeResults = await cumulativeResultsTask;
+
+                    CurrencySummary currencySummaryBtc = this.currencySummaryCalculator.CalculateSummary(
+                        orderBook,
+                        previousOrderBookBtc,
+                        cumulativeResults.Select(r => OrderBook.FromJson(r)));
+
+                    Console.WriteLine(currencySummaryBtc.ToString());
+
+                    Task saveTask = this.currencyRepository.Save(messageReceived);
+
+                    previousOrderBookBtc = orderBook;
 
                     await Task.Delay(TimeSpan.FromSeconds(5));
                 }

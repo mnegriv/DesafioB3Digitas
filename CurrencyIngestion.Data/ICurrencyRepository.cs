@@ -2,6 +2,8 @@
 {
     public interface ICurrencyRepository
     {
-        void Save(string orderBook);
+        Task Save(string orderBook);
+
+        Task<IEnumerable<string>> GetAll();
     }
 }

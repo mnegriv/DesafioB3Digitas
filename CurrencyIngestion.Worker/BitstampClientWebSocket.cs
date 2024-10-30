@@ -11,7 +11,7 @@ namespace CurrencyIngestion.Worker
 
         public ClientWebSocket? WebSocket { get; set; }
 
-        private static readonly byte[] receiveBuffer = new byte[1024 * 10000];
+        private static readonly byte[] receiveBuffer = new byte[1024 * 100000];
 
         public enum CurrencyPair
         {
@@ -41,9 +41,7 @@ namespace CurrencyIngestion.Worker
         public async Task<string> Subscribe(CurrencyPair currencyPair)
         {
             if (WebSocket is null)
-            {
                 throw new InvalidOperationException("The web socket client was not initialized");
-            }
 
             string name = currencyPair switch
             {
@@ -71,9 +69,7 @@ namespace CurrencyIngestion.Worker
         public async Task<string?> ReceiveMessage()
         {
             if (WebSocket is null)
-            {
                 throw new InvalidOperationException("The web socket client was not initialized");
-            }
 
             WebSocketReceiveResult received = await WebSocket.ReceiveAsync(new ArraySegment<byte>(receiveBuffer), CancellationToken.None);
 

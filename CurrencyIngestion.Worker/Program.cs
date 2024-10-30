@@ -1,4 +1,5 @@
 using CurrencyIngestion.Data;
+using CurrencyIngestion.Service;
 
 namespace CurrencyIngestion.Worker
 {
@@ -11,6 +12,7 @@ namespace CurrencyIngestion.Worker
                 {
                     services.AddHostedService<Worker>();
                     services.AddSingleton<ICurrencyRepository, FakeCurrencyRepo>();
+                    services.AddSingleton<ICurrencySummaryCalculator, CurrencySummaryCalculator>();
                 })
                 .Build();
 

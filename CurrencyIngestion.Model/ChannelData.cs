@@ -8,6 +8,7 @@ namespace CurrencyIngestion.Model
         {
             Name = name;
         }
+
         [JsonPropertyName("channel")]
         public string? Name { get; init; }
     }
