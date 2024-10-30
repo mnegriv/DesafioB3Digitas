@@ -18,14 +18,20 @@ namespace CurrencyIngestion.Data
 
             connection.Open();
 
-            string sql = "INSERT INTO Currency VALUES (GETDATE(), @orderBook)";
+            string sql = "INSERT INTO OrderBook (Content) OUTPUT inserted.Identifier VALUES (@orderBook)";
 
             await connection.ExecuteScalarAsync(sql, new { orderBook });
         }
 
-        Task<IEnumerable<string>> ICurrencyRepository.GetAll()
+        public async Task<IEnumerable<string>> GetAll()
         {
-            throw new NotImplementedException();
+            using var connection = new SqlConnection(connString);
+
+            connection.Open();
+
+            string sql = "SELECT Content FROM OrderBook;";
+
+            return await connection.QueryAsync<string>(sql);
         }
     }
 }

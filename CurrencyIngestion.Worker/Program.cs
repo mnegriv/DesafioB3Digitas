@@ -11,7 +11,12 @@ namespace CurrencyIngestion.Worker
                 .ConfigureServices(services =>
                 {
                     services.AddHostedService<Worker>();
-                    services.AddSingleton<ICurrencyRepository, FakeCurrencyRepo>();
+                    services.AddSingleton<ICurrencyRepository>(c =>
+                    {
+                        //TODO: pegar da config
+                        string connString = "Server=localhost\\SQLEXPRESS01;Database=CurrencyIngestion;Trusted_Connection=True;";
+                        return new CurrencyRepositorySQLServer(connString);
+                    });
                     services.AddSingleton<ICurrencySummaryCalculator, CurrencySummaryCalculator>();
                 })
                 .Build();

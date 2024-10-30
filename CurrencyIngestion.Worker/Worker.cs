@@ -31,8 +31,9 @@ namespace CurrencyIngestion.Worker
             await bitstampClientWebSocket.ConnectAsync();
 
             await Task.WhenAll(
-                bitstampClientWebSocket.Subscribe(BitstampClientWebSocket.CurrencyPair.BTCUSD),
-                bitstampClientWebSocket.Subscribe(BitstampClientWebSocket.CurrencyPair.ETHUSD));
+                bitstampClientWebSocket.Subscribe(BitstampClientWebSocket.CurrencyPair.BTCUSD)
+                //, bitstampClientWebSocket.Subscribe(BitstampClientWebSocket.CurrencyPair.ETHUSD)
+                );
 
             //Receive data
             var receiveTask = Task.Run(async () =>
@@ -49,6 +50,9 @@ namespace CurrencyIngestion.Worker
 
                     if (messageReceived is null)
                         break;
+
+                    if (messageReceived.Equals(string.Empty))
+                        continue;
 
                     Console.WriteLine("=======================================");
                     Console.WriteLine("Received: " + messageReceived);
@@ -69,7 +73,7 @@ namespace CurrencyIngestion.Worker
 
                     previousOrderBookBtc = orderBook;
 
-                    await Task.Delay(TimeSpan.FromSeconds(5));
+                    await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
                 }
             }, stoppingToken);
 

@@ -45,8 +45,8 @@ namespace CurrencyIngestion.Worker
 
             string name = currencyPair switch
             {
-                CurrencyPair.BTCUSD => "diff_order_book_btcusd",
-                CurrencyPair.ETHUSD => "diff_order_book_ethusd",
+                CurrencyPair.BTCUSD => "order_book_btcusd",
+                CurrencyPair.ETHUSD => "order_book_ethusd",
                 _ => throw new InvalidOperationException("This currency pair is not allowed"),
             };
 
