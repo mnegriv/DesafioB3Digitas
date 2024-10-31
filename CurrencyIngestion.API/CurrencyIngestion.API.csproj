@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>11e60548-2045-4804-9b70-7b9df7281dc6</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.20" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CurrencyIngestion.Common\CurrencyIngestion.Common.csproj" />
+    <ProjectReference Include="..\CurrencyIngestion.Data\CurrencyIngestion.Data.csproj" />
+    <ProjectReference Include="..\CurrencyIngestion.Model\CurrencyIngestion.Model.csproj" />
+    <ProjectReference Include="..\CurrencyIngestion.Service\CurrencyIngestion.Service.csproj" />
+  </ItemGroup>
+
+</Project>

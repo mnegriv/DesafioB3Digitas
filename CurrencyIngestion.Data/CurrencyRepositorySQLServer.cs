@@ -18,9 +18,9 @@ namespace CurrencyIngestion.Data
 
             connection.Open();
 
-            string sql = "INSERT INTO OrderBook (Content) OUTPUT inserted.Identifier VALUES (@orderBook)";
+            string command = "INSERT INTO OrderBook (Content) OUTPUT inserted.Identifier VALUES (@orderBook)";
 
-            await connection.ExecuteScalarAsync(sql, new { orderBook });
+            await connection.ExecuteScalarAsync(command, new { orderBook });
         }
 
         public async Task<IEnumerable<string>> GetAll()
@@ -29,9 +29,20 @@ namespace CurrencyIngestion.Data
 
             connection.Open();
 
-            string sql = "SELECT Content FROM OrderBook;";
+            string command = "SELECT Content FROM OrderBook;";
 
-            return await connection.QueryAsync<string>(sql);
+            return await connection.QueryAsync<string>(command);
+        }
+
+        public async Task<string> GetLatest()
+        {
+            using var connection = new SqlConnection(connString);
+
+            connection.Open();
+
+            string command = "SELECT TOP 1 Content FROM OrderBook ORDER BY Time Desc;";
+
+            return await connection.QuerySingleAsync<string>(command);
         }
     }
 }

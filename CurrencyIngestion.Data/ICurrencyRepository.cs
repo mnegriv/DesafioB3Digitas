@@ -5,5 +5,7 @@
         Task Save(string orderBook);
 
         Task<IEnumerable<string>> GetAll();
+
+        Task<string> GetLatest();
     }
 }

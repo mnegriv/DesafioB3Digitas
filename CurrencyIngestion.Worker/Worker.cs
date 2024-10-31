@@ -54,10 +54,6 @@ namespace CurrencyIngestion.Worker
                     if (messageReceived.Equals(string.Empty))
                         continue;
 
-                    Console.WriteLine("=======================================");
-                    Console.WriteLine("Received: " + messageReceived);
-                    Console.WriteLine("=======================================");
-
                     OrderBook? orderBook = OrderBook.FromJson(messageReceived);
 
                     var cumulativeResults = await cumulativeResultsTask;

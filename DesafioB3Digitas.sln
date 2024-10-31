@@ -7,13 +7,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyIngestion.Model", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyIngestion.Worker", "CurrencyIngestion.Worker\CurrencyIngestion.Worker.csproj", "{FEFE20E5-50DA-40AC-911F-33E33C296BDE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrencyIngestion.Data", "CurrencyIngestion.Data\CurrencyIngestion.Data.csproj", "{19A7E63B-C960-4280-A84B-27722A8667B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyIngestion.Data", "CurrencyIngestion.Data\CurrencyIngestion.Data.csproj", "{19A7E63B-C960-4280-A84B-27722A8667B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrencyIngestion.Service", "CurrencyIngestion.Service\CurrencyIngestion.Service.csproj", "{17EEA7E8-AB8F-4F53-91B7-A531FE9A051D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyIngestion.Service", "CurrencyIngestion.Service\CurrencyIngestion.Service.csproj", "{17EEA7E8-AB8F-4F53-91B7-A531FE9A051D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{692C68E8-CAF3-4C00-9AD3-E9AF4872F15C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrencyIngestion.Test.Service", "CurrencyIngestion.Test.Service\CurrencyIngestion.Test.Service.csproj", "{21E00B76-E221-45C8-9925-BCCCE97CAE89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyIngestion.Test.Service", "CurrencyIngestion.Test.Service\CurrencyIngestion.Test.Service.csproj", "{21E00B76-E221-45C8-9925-BCCCE97CAE89}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrencyIngestion.API", "CurrencyIngestion.API\CurrencyIngestion.API.csproj", "{2A86167A-F52E-4E99-B9C8-0DD6ECC191E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrencyIngestion.Common", "CurrencyIngestion.Common\CurrencyIngestion.Common.csproj", "{40181A1D-DD65-423C-A15C-4F395E25A431}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +45,14 @@ Global
 		{21E00B76-E221-45C8-9925-BCCCE97CAE89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21E00B76-E221-45C8-9925-BCCCE97CAE89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21E00B76-E221-45C8-9925-BCCCE97CAE89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A86167A-F52E-4E99-B9C8-0DD6ECC191E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A86167A-F52E-4E99-B9C8-0DD6ECC191E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A86167A-F52E-4E99-B9C8-0DD6ECC191E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A86167A-F52E-4E99-B9C8-0DD6ECC191E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40181A1D-DD65-423C-A15C-4F395E25A431}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40181A1D-DD65-423C-A15C-4F395E25A431}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40181A1D-DD65-423C-A15C-4F395E25A431}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40181A1D-DD65-423C-A15C-4F395E25A431}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
