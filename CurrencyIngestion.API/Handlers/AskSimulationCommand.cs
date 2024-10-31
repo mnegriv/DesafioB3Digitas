@@ -1,4 +1,5 @@
 ﻿using CurrencyIngestion.API.Payload;
+using CurrencyIngestion.Common.Enums;
 using MediatR;
 
 namespace CurrencyIngestion.API.Handlers
@@ -7,9 +8,9 @@ namespace CurrencyIngestion.API.Handlers
     {
         public Request Request { get; set; }
 
-        public string Currency { get; set; }
+        public CurrencyPair Currency { get; set; }
 
-        public AskSimulationCommand(Request request, string currency)
+        public AskSimulationCommand(Request request, CurrencyPair currency)
         {
             Request = request;
             Currency = currency;

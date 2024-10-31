@@ -21,7 +21,7 @@ namespace CurrencyIngestion.API.Handlers
 
         public async Task<Result> Handle(BidSimulationCommand request, CancellationToken cancellationToken)
         {
-            string latestOrderBookJson = await currencyRepository.GetLatest();
+            string latestOrderBookJson = await currencyRepository.GetLatest(request.Currency);
 
             var bidRequest = request.Request;
 

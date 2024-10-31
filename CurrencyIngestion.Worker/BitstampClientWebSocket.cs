@@ -2,6 +2,7 @@
 using System.Net.WebSockets;
 using System.Text.Json;
 using System.Text;
+using CurrencyIngestion.Common.Enums;
 
 namespace CurrencyIngestion.Worker
 {
@@ -12,12 +13,6 @@ namespace CurrencyIngestion.Worker
         public ClientWebSocket? WebSocket { get; set; }
 
         private static readonly byte[] receiveBuffer = new byte[1024 * 100000];
-
-        public enum CurrencyPair
-        {
-            BTCUSD,
-            ETHUSD
-        }
 
         public WebSocketState? CurrentState => WebSocket?.State;
 
@@ -45,8 +40,8 @@ namespace CurrencyIngestion.Worker
 
             string name = currencyPair switch
             {
-                CurrencyPair.BTCUSD => "order_book_btcusd",
-                CurrencyPair.ETHUSD => "order_book_ethusd",
+                CurrencyPair.BTCUSD => Common.Constants.BTC_CHANNEL_IDENTIFIER,
+                CurrencyPair.ETHUSD => Common.Constants.ETH_CHANNEL_IDENTIFIER,
                 _ => throw new InvalidOperationException("This currency pair is not allowed"),
             };
 

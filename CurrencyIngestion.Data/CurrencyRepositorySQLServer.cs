@@ -1,5 +1,7 @@
-﻿using Dapper;
+﻿using CurrencyIngestion.Common.Enums;
+using Dapper;
 using System.Data.SqlClient;
+using System.Net.Http.Headers;
 
 namespace CurrencyIngestion.Data
 {
@@ -7,16 +9,15 @@ namespace CurrencyIngestion.Data
     {
         private readonly string connString;
 
-        private readonly string schema;
-
-        public CurrencyRepositorySQLServer(string connString, string schema)
+        public CurrencyRepositorySQLServer(string connString)
         {
             this.connString = connString ?? throw new ArgumentNullException(nameof(connString));
-            this.schema = schema;
         }
 
-        public async Task Save(string orderBook)
+        public async Task Save(string orderBook, CurrencyPair currency)
         {
+            string schema = GetSchema(currency);
+
             using var connection = new SqlConnection(connString);
 
             connection.Open();
@@ -26,8 +27,10 @@ namespace CurrencyIngestion.Data
             await connection.ExecuteScalarAsync(command, new { orderBook });
         }
 
-        public async Task<IEnumerable<string>> GetAll()
+        public async Task<IEnumerable<string>> GetAll(CurrencyPair currency)
         {
+            string schema = GetSchema(currency);
+
             using var connection = new SqlConnection(connString);
 
             connection.Open();
@@ -37,8 +40,10 @@ namespace CurrencyIngestion.Data
             return await connection.QueryAsync<string>(command);
         }
 
-        public async Task<string> GetLatest()
+        public async Task<string> GetLatest(CurrencyPair currency)
         {
+            string schema = GetSchema(currency);
+
             using var connection = new SqlConnection(connString);
 
             connection.Open();
@@ -46,6 +51,16 @@ namespace CurrencyIngestion.Data
             string command = $"SELECT TOP 1 Content FROM {schema}.OrderBook ORDER BY Time Desc;";
 
             return await connection.QuerySingleAsync<string>(command);
+        }
+
+        private static string GetSchema(CurrencyPair currency)
+        {
+            return currency switch
+            {
+                CurrencyPair.BTCUSD => "btc",
+                CurrencyPair.ETHUSD => "eth",
+                _ => throw new InvalidOperationException("Invalid currency"),
+            };
         }
     }
 }

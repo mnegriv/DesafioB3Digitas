@@ -1,5 +1,6 @@
 ﻿using CurrencyIngestion.API.Handlers;
 using CurrencyIngestion.API.Payload;
+using CurrencyIngestion.Common.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,7 +20,7 @@ namespace CurrencyIngestion.API.Controllers
         [HttpPost("btc/asks")]
         public async Task<ActionResult<Result>> AsksBtc([FromBody] Request request)
         {
-            Result result = await mediator.Send(new AskSimulationCommand(request, "BTC"));
+            Result result = await mediator.Send(new AskSimulationCommand(request, CurrencyPair.BTCUSD));
 
             if (request is null)
                 return NoContent();
@@ -30,7 +31,29 @@ namespace CurrencyIngestion.API.Controllers
         [HttpPost("btc/bids")]
         public async Task<ActionResult<Result>> BidsBtc([FromBody] Request request)
         {
-            Result result = await mediator.Send(new BidSimulationCommand(request, "BTC"));
+            Result result = await mediator.Send(new BidSimulationCommand(request, CurrencyPair.BTCUSD));
+
+            if (request is null)
+                return NoContent();
+
+            return Ok(result);
+        }
+
+        [HttpPost("eth/asks")]
+        public async Task<ActionResult<Result>> AsksEth([FromBody] Request request)
+        {
+            Result result = await mediator.Send(new AskSimulationCommand(request, CurrencyPair.ETHUSD));
+
+            if (request is null)
+                return NoContent();
+
+            return Ok(result);
+        }
+
+        [HttpPost("eth/bids")]
+        public async Task<ActionResult<Result>> BidsEth([FromBody] Request request)
+        {
+            Result result = await mediator.Send(new BidSimulationCommand(request, CurrencyPair.ETHUSD));
 
             if (request is null)
                 return NoContent();

@@ -1,11 +1,13 @@
-﻿namespace CurrencyIngestion.Data
+﻿using CurrencyIngestion.Common.Enums;
+
+namespace CurrencyIngestion.Data
 {
     public interface ICurrencyRepository
     {
-        Task Save(string orderBook);
+        Task Save(string orderBook, CurrencyPair currency);
 
-        Task<IEnumerable<string>> GetAll();
+        Task<IEnumerable<string>> GetAll(CurrencyPair currency);
 
-        Task<string> GetLatest();
+        Task<string> GetLatest(CurrencyPair currency);
     }
 }
