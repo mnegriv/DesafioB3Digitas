@@ -7,7 +7,7 @@ namespace CurrencyIngestion.Service
         public ExchangeSimulationModel SimulateOperation(string currency, decimal amountRequested, List<Operation> operations)
         {
             ExchangeSimulationModel simulationModel = new();
-            Queue<Operation> operationsQueue = new(operations.OrderBy(o => o.Price));
+            Queue<Operation> operationsQueue = new(operations);
             
             while (simulationModel.TotalAmount <= amountRequested & operationsQueue.Any())
             {

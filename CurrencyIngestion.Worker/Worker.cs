@@ -44,9 +44,9 @@ namespace CurrencyIngestion.Worker
                 while (bitstampClientWebSocket.CurrentState == WebSocketState.Open 
                         && !stoppingToken.IsCancellationRequested)
                 {
-                    var cumulativeResultsTask = this.currencyRepository.GetAll();
-
                     string? messageReceived = await bitstampClientWebSocket.ReceiveMessage();
+
+                    var cumulativeResults = await this.currencyRepository.GetAll();
 
                     if (messageReceived is null)
                         break;
@@ -56,14 +56,12 @@ namespace CurrencyIngestion.Worker
 
                     OrderBook? orderBook = OrderBook.FromJson(messageReceived);
 
-                    var cumulativeResults = await cumulativeResultsTask;
-
                     CurrencySummary currencySummaryBtc = this.currencySummaryCalculator.CalculateSummary(
                         orderBook,
                         previousOrderBookBtc,
                         cumulativeResults.Select(r => OrderBook.FromJson(r)));
 
-                    Console.WriteLine(currencySummaryBtc.ToString());
+                    PrintCurrentStatus(currencySummaryBtc);
 
                     Task saveTask = this.currencyRepository.Save(messageReceived);
 
@@ -78,6 +76,11 @@ namespace CurrencyIngestion.Worker
             // Closing the connection
             await bitstampClientWebSocket.CloseAsync();
             Console.WriteLine("WebSocket connection closed." + bitstampClientWebSocket.CurrentState);
+        }
+
+        private static void PrintCurrentStatus(CurrencySummary currencySummaryBtc)
+        {
+            Console.WriteLine(currencySummaryBtc.ToString());
         }
     }
 }

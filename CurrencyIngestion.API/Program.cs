@@ -1,5 +1,6 @@
 
 using CurrencyIngestion.API.Extensions;
+using Microsoft.AspNetCore.Hosting;
 
 namespace CurrencyIngestion.API
 {
@@ -17,6 +18,7 @@ namespace CurrencyIngestion.API
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddServices();
+            builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Program>());
 
             var app = builder.Build();
 

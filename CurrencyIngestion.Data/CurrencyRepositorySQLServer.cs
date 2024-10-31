@@ -7,9 +7,12 @@ namespace CurrencyIngestion.Data
     {
         private readonly string connString;
 
-        public CurrencyRepositorySQLServer(string connString)
+        private readonly string schema;
+
+        public CurrencyRepositorySQLServer(string connString, string schema)
         {
             this.connString = connString ?? throw new ArgumentNullException(nameof(connString));
+            this.schema = schema;
         }
 
         public async Task Save(string orderBook)
@@ -18,7 +21,7 @@ namespace CurrencyIngestion.Data
 
             connection.Open();
 
-            string command = "INSERT INTO OrderBook (Content) OUTPUT inserted.Identifier VALUES (@orderBook)";
+            string command = $"INSERT INTO {schema}.OrderBook (Content) OUTPUT inserted.Identifier VALUES (@orderBook)";
 
             await connection.ExecuteScalarAsync(command, new { orderBook });
         }
@@ -29,7 +32,7 @@ namespace CurrencyIngestion.Data
 
             connection.Open();
 
-            string command = "SELECT Content FROM OrderBook;";
+            string command = $"SELECT Content FROM {schema}.OrderBook;";
 
             return await connection.QueryAsync<string>(command);
         }
@@ -40,7 +43,7 @@ namespace CurrencyIngestion.Data
 
             connection.Open();
 
-            string command = "SELECT TOP 1 Content FROM OrderBook ORDER BY Time Desc;";
+            string command = $"SELECT TOP 1 Content FROM {schema}.OrderBook ORDER BY Time Desc;";
 
             return await connection.QuerySingleAsync<string>(command);
         }

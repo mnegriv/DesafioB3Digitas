@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CurrencyIngestion.Common\CurrencyIngestion.Common.csproj" />
     <ProjectReference Include="..\CurrencyIngestion.Model\CurrencyIngestion.Model.csproj" />
   </ItemGroup>
 

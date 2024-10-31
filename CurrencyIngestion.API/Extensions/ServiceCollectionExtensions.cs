@@ -12,7 +12,7 @@ namespace CurrencyIngestion.API.Extensions
             {
                 //TODO: pegar da config
                 string connString = "Server=localhost\\SQLEXPRESS01;Database=CurrencyIngestion;Trusted_Connection=True;";
-                return new CurrencyRepositorySQLServer(connString);
+                return new CurrencyRepositorySQLServer(connString, "btc");
             });
         }
     }
