@@ -27,8 +27,6 @@ namespace CurrencyIngestion.Model
     public record OrderData 
     {
         public string? Timestamp { get; init; }
-        public DateTimeOffset Time => DateTimeOffset.FromUnixTimeMilliseconds(long.Parse(Timestamp ?? "0"));
-        public string TimeStr => Time.ToLocalTime().ToString();
         public List<List<string>> Bids { get; init; } = new List<List<string>>();
         public List<List<string>> Asks { get; init; } = new List<List<string>>();
     }

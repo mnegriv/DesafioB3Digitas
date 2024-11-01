@@ -13,11 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyIngestion.Service",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{692C68E8-CAF3-4C00-9AD3-E9AF4872F15C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyIngestion.Test.Service", "CurrencyIngestion.Test.Service\CurrencyIngestion.Test.Service.csproj", "{21E00B76-E221-45C8-9925-BCCCE97CAE89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyIngestion.Test", "CurrencyIngestion.Test\CurrencyIngestion.Test.csproj", "{21E00B76-E221-45C8-9925-BCCCE97CAE89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrencyIngestion.API", "CurrencyIngestion.API\CurrencyIngestion.API.csproj", "{2A86167A-F52E-4E99-B9C8-0DD6ECC191E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyIngestion.API", "CurrencyIngestion.API\CurrencyIngestion.API.csproj", "{2A86167A-F52E-4E99-B9C8-0DD6ECC191E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrencyIngestion.Common", "CurrencyIngestion.Common\CurrencyIngestion.Common.csproj", "{40181A1D-DD65-423C-A15C-4F395E25A431}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyIngestion.Common", "CurrencyIngestion.Common\CurrencyIngestion.Common.csproj", "{40181A1D-DD65-423C-A15C-4F395E25A431}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
