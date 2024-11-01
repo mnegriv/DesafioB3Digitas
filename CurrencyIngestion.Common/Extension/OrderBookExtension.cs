@@ -1,11 +1,12 @@
-﻿using CurrencyIngestion.Model;
+﻿using CurrencyIngestion.Common.Enums;
+using CurrencyIngestion.Model;
 using System.Globalization;
 
 namespace CurrencyIngestion.Common.Extension
 {
     public static class OrderBookExtension
     {
-        public static IEnumerable<Operation> ToAskOperations(this OrderBook orderBook)
+        public static IEnumerable<Operation> ToAskOperations(this OrderBook orderBook, CurrencyPair currency)
         {
             var orderBookAsks = orderBook?.Data?.Asks;
 
@@ -13,7 +14,7 @@ namespace CurrencyIngestion.Common.Extension
             {
                 Operation operation = new()
                 {
-                    Currency = "BTC",
+                    Currency = $"{currency}",
                     Price = ParseDecimal(data[0]),
                     Amount = ParseDecimal(data[1]),
                 };
@@ -22,7 +23,7 @@ namespace CurrencyIngestion.Common.Extension
             }
         }
 
-        public static IEnumerable<Operation> ToBidOperations(this OrderBook orderBook)
+        public static IEnumerable<Operation> ToBidOperations(this OrderBook orderBook, CurrencyPair currency)
         {
             var orderBookBids = orderBook?.Data?.Bids;
 
@@ -30,7 +31,7 @@ namespace CurrencyIngestion.Common.Extension
             {
                 Operation operation = new()
                 {
-                    Currency = "BTC",
+                    Currency = $"{currency}",
                     Price = ParseDecimal(data[0]),
                     Amount = ParseDecimal(data[1]),
                 };

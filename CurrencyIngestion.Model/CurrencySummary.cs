@@ -14,7 +14,7 @@ namespace CurrencyIngestion.Model
         {
             StringBuilder sb = new();
             sb.AppendLine(Currency);
-            sb.AppendLine($"Time: {DateTime.Now.ToLocalTime().ToShortTimeString()}");
+            sb.AppendLine($"Time: {DateTime.Now.ToLocalTime().ToString("dd/MM HH:mm:ss")}");
             sb.AppendLine($"Highest Price: {HighestPrice}");
             sb.AppendLine($"Lowest Price: {LowestPrice}");
             sb.AppendLine($"Current Average Price: {Math.Round(AveragePriceCurrent, 2)}");

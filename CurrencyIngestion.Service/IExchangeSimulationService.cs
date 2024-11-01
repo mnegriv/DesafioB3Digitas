@@ -4,6 +4,7 @@ namespace CurrencyIngestion.Service
 {
     public interface IExchangeSimulationService
     {
-        ExchangeSimulationModel SimulateOperation(string currency, decimal amountRequested, List<Operation> operations);
+        ExchangeSimulationModel SimulateAskOperation(string currency, decimal amountRequested, List<Operation> operations);
+        ExchangeSimulationModel SimulateBidOperation(string currency, decimal amountRequested, List<Operation> operations);
     }
 }

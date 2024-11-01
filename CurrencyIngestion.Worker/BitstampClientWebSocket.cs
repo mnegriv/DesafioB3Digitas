@@ -8,22 +8,22 @@ namespace CurrencyIngestion.Worker
 {
     public class BitstampClientWebSocket : IDisposable
     {
-        public static Uri bitstampUri = new("wss://ws.bitstamp.net");
+        private static readonly Uri bitstampUri = new("wss://ws.bitstamp.net");
 
         public ClientWebSocket? WebSocket { get; set; }
 
-        private static readonly byte[] receiveBuffer = new byte[1024 * 100000];
+        private static readonly byte[] receiveBuffer = new byte[1024 * 5];
 
         public WebSocketState? CurrentState => WebSocket?.State;
 
-        public async Task ConnectAsync()
+        public async Task ConnectAsync(CancellationToken cancellationToken)
         {
             WebSocket = new();
 
-            await WebSocket.ConnectAsync(bitstampUri, CancellationToken.None);
+            await WebSocket.ConnectAsync(bitstampUri, cancellationToken);
         }
 
-        public async Task CloseAsync()
+        public async Task CloseAsync(CancellationToken cancellationToken)
         {
             if (WebSocket is null)
             {
@@ -61,17 +61,16 @@ namespace CurrencyIngestion.Worker
             return Encoding.UTF8.GetString(receiveBuffer, 0, result.Count);
         }
 
-        public async Task<string?> ReceiveMessage()
+        public async Task<string?> ReceiveMessage(CancellationToken cancellationToken)
         {
             if (WebSocket is null)
                 throw new InvalidOperationException("The web socket client was not initialized");
 
-            WebSocketReceiveResult received = await WebSocket.ReceiveAsync(new ArraySegment<byte>(receiveBuffer), CancellationToken.None);
+            WebSocketReceiveResult received = await WebSocket
+                .ReceiveAsync(new ArraySegment<byte>(receiveBuffer), cancellationToken);
 
             if (received.MessageType == WebSocketMessageType.Close)
-            {
                 return null;
-            }
 
             return Encoding.UTF8.GetString(receiveBuffer, 0, received.Count);
         }

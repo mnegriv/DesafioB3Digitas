@@ -1,15 +1,14 @@
 ﻿using CurrencyIngestion.Common.Enums;
 using Dapper;
 using System.Data.SqlClient;
-using System.Net.Http.Headers;
 
 namespace CurrencyIngestion.Data
 {
-    public class CurrencyRepositorySQLServer : ICurrencyRepository
+    public class CurrencySQLServerRepository : ICurrencyRepository
     {
         private readonly string connString;
 
-        public CurrencyRepositorySQLServer(string connString)
+        public CurrencySQLServerRepository(string connString)
         {
             this.connString = connString ?? throw new ArgumentNullException(nameof(connString));
         }
