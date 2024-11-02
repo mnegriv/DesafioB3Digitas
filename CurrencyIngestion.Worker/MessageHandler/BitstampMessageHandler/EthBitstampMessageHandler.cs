@@ -4,14 +4,14 @@ using CurrencyIngestion.Model;
 using CurrencyIngestion.Service;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace CurrencyIngestion.Worker.MessageHandler
+namespace CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler
 {
-    public class BtcMessageHandler : BaseMessageHandler, IMessageHandler
+    public class EthBitstampMessageHandler : BaseBitstampMessageHandler, IBitstampMessageHandler
     {
         private readonly ICurrencyRepository currencyRepository;
         private readonly ICurrencySummaryCalculator currencySummaryCalculator;
 
-        public BtcMessageHandler(
+        public EthBitstampMessageHandler(
             IMemoryCache memoryCache,
             ICurrencyRepository currencyRepository,
             ICurrencySummaryCalculator currencySummaryCalculator)
@@ -23,18 +23,18 @@ namespace CurrencyIngestion.Worker.MessageHandler
 
         public async Task Handle(OrderBook orderBook, string messageReceived)
         {
-            var cumulativeResults = await this.currencyRepository.GetAll(CurrencyPair.BTCUSD);
+            var cumulativeResults = await currencyRepository.GetAll(CurrencyPair.ETHUSD);
 
-            OrderBook? previousOrderBookBtc = GetOrderBookFromCache(orderBook);
+            OrderBook? previoussOrderBookEth = GetOrderBookFromCache(orderBook);
 
-            CurrencySummary currencySummaryBtc = this.currencySummaryCalculator.CalculateSummary(
+            CurrencySummary currencySummaryEth = currencySummaryCalculator.CalculateSummary(
                 orderBook,
-                previousOrderBookBtc,
+                previoussOrderBookEth,
                 cumulativeResults.Select(r => OrderBook.FromJson(r)));
 
-            PrintCurrentStatus(currencySummaryBtc, 7);
+            PrintCurrentStatus(currencySummaryEth, 16);
 
-            _ = this.currencyRepository.Save(messageReceived, CurrencyPair.BTCUSD);
+            _ = currencyRepository.Save(messageReceived, CurrencyPair.ETHUSD);
 
             SetOrderBookToCache(orderBook);
         }

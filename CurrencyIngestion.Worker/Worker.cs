@@ -1,18 +1,18 @@
 using System.Net.WebSockets;
 using CurrencyIngestion.Common.Enums;
 using CurrencyIngestion.Model;
-using CurrencyIngestion.Worker.MessageHandler;
+using CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler;
 
 namespace CurrencyIngestion.Worker
 {
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> logger;
-        private readonly IMessageHandlerFactory messageHandlerFactory;
+        private readonly IBitstampMessageHandlerFactory messageHandlerFactory;
 
         private static readonly TimeSpan loopDelay = TimeSpan.FromSeconds(5);
 
-        public Worker(ILogger<Worker> logger, IMessageHandlerFactory messageHandlerFactory)
+        public Worker(ILogger<Worker> logger, IBitstampMessageHandlerFactory messageHandlerFactory)
         {
             this.logger = logger;
             this.messageHandlerFactory = messageHandlerFactory;

@@ -1,9 +1,9 @@
 ﻿using CurrencyIngestion.Model;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace CurrencyIngestion.Worker.MessageHandler
+namespace CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler
 {
-    public abstract class BaseMessageHandler
+    public abstract class BaseBitstampMessageHandler
     {
         private readonly IMemoryCache memoryCache;
 
@@ -13,7 +13,7 @@ namespace CurrencyIngestion.Worker.MessageHandler
             SlidingExpiration = TimeSpan.FromMinutes(2)
         };
 
-        protected BaseMessageHandler(IMemoryCache memoryCache)
+        protected BaseBitstampMessageHandler(IMemoryCache memoryCache)
         {
             this.memoryCache = memoryCache;
         }

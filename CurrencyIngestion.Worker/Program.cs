@@ -1,6 +1,6 @@
 using CurrencyIngestion.Data;
 using CurrencyIngestion.Service;
-using CurrencyIngestion.Worker.MessageHandler;
+using CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler;
 
 namespace CurrencyIngestion.Worker
 {
@@ -20,7 +20,7 @@ namespace CurrencyIngestion.Worker
                         return new CurrencySQLServerRepository(connString);
                     });
                     services.AddSingleton<ICurrencySummaryCalculator, CurrencySummaryCalculator>();
-                    services.AddSingleton<IMessageHandlerFactory, MessageHandlerFactory>();
+                    services.AddSingleton<IBitstampMessageHandlerFactory, BitstampMessageHandlerFactory>();
                 })
                 .Build();
 

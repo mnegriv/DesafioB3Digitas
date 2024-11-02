@@ -3,18 +3,18 @@ using CurrencyIngestion.Model;
 using CurrencyIngestion.Service;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace CurrencyIngestion.Worker.MessageHandler
+namespace CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler
 {
-    public class MessageHandlerFactory : IMessageHandlerFactory
+    public class BitstampMessageHandlerFactory : IBitstampMessageHandlerFactory
     {
         private readonly IServiceProvider serviceProvider;
 
-        public MessageHandlerFactory(IServiceProvider serviceProvider)
+        public BitstampMessageHandlerFactory(IServiceProvider serviceProvider)
         {
             this.serviceProvider = serviceProvider;
         }
 
-        public IMessageHandler Create(OrderBook orderBook)
+        public IBitstampMessageHandler Create(OrderBook orderBook)
         {
             var memoryCache = serviceProvider.GetRequiredService<IMemoryCache>();
             var currencyRepository = serviceProvider.GetRequiredService<ICurrencyRepository>();
@@ -22,12 +22,12 @@ namespace CurrencyIngestion.Worker.MessageHandler
 
             if (orderBook.Channel == Common.Constants.BTC_CHANNEL_IDENTIFIER)
             {
-                return new BtcMessageHandler(memoryCache, currencyRepository, currencySummaryCalculator);
+                return new BtcBitstampMessageHandler(memoryCache, currencyRepository, currencySummaryCalculator);
             }
 
             if (orderBook.Channel == Common.Constants.ETH_CHANNEL_IDENTIFIER)
             {
-                return new EthMessageHandler(memoryCache, currencyRepository, currencySummaryCalculator);
+                return new EthBitstampMessageHandler(memoryCache, currencyRepository, currencySummaryCalculator);
             }
 
             throw new InvalidOperationException($"This message channel is not supported: {orderBook.Channel}");

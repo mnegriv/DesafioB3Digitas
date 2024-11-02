@@ -19,7 +19,7 @@ namespace CurrencyIngestion.Test.CurrencyIngestion.API.Test.Controllers
         [InlineData("btc/bids")]
         [InlineData("eth/asks")]
         [InlineData("eth/bids")]
-        public async Task Test1(string endpoint)
+        public async Task Given_ApiEndpoint_When_TryCallEndpoint_Then_SuccessIsObtained(string endpoint)
         {
             Request request = new(Amount: 100);
 
