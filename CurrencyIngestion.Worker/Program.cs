@@ -1,3 +1,4 @@
+using CurrencyIngestion.Common;
 using CurrencyIngestion.Data;
 using CurrencyIngestion.Service;
 using CurrencyIngestion.Worker.MessageHandler;
@@ -16,8 +17,10 @@ namespace CurrencyIngestion.Worker
                     services.AddMemoryCache();
                     services.AddSingleton<ICurrencyRepository>(c =>
                     {
-                        //TODO: pegar da config
-                        string connString = "Server=localhost\\SQLEXPRESS01;Database=CurrencyIngestion;Trusted_Connection=True;";
+                        var config = c.GetRequiredService<IConfiguration>();
+                        string connString = config.GetConnectionString(Constants.CURRENCY_CONNECTIONSTRING_NAME)
+                            ?? throw new KeyNotFoundException($"The connection string was not informed for '{Constants.CURRENCY_CONNECTIONSTRING_NAME}'");
+
                         return new CurrencySQLServerRepository(connString);
                     });
                     services.AddSingleton<ICurrencySummaryCalculator, CurrencySummaryCalculator>();

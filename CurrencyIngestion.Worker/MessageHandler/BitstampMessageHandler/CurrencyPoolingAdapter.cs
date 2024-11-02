@@ -31,8 +31,10 @@ namespace CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler
             {
                 while (true)
                 {
-                    Console.WriteLine("Connecting...");
-                    await bitstampClientWebSocket.ConnectAsync(stoppingToken);
+                    if (stoppingToken.IsCancellationRequested)
+                        return;
+
+                    await bitstampClientWebSocket.ConnectAsync(stoppingToken);                    
 
                     await Task.WhenAll(
                         bitstampClientWebSocket.Subscribe(CurrencyPair.BTCUSD),
@@ -57,7 +59,7 @@ namespace CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler
             }
             finally
             {
-                Console.WriteLine($"WebSocket connection closed. {bitstampClientWebSocket.CurrentState}");
+                Console.WriteLine($"Closing webSocket connection...");
             }
         }
 
@@ -73,7 +75,7 @@ namespace CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler
 
                 _ = HandleMessage(messageReceived);
 
-                await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
+                Thread.Sleep(TimeSpan.FromSeconds(5));
             }
         }
 
@@ -93,15 +95,36 @@ namespace CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler
 
         private void PrintCurrentStatus()
         {
-            Console.Clear();
+            try
+            {
+                Console.Clear();
 
-            Console.WriteLine("***Summary***");
+                Console.WriteLine("***Summary***");
 
-            var btcSummary = memoryCache.Get(Constants.BTC_CHANNEL_IDENTIFIER) as CurrencySummary;
-            Console.WriteLine(btcSummary?.ToString());
+                if (memoryCache.Get(Constants.BTC_CHANNEL_IDENTIFIER) is not CurrencySummary btcSummary)
+                {
+                    Console.WriteLine(Constants.BTC_CHANNEL_IDENTIFIER);
+                    Console.WriteLine("Not yet computed");
+                }
+                else
+                {
+                    Console.WriteLine(btcSummary.ToString());
+                }
 
-            var ethSummary = memoryCache.Get(Constants.ETH_CHANNEL_IDENTIFIER) as CurrencySummary;
-            Console.WriteLine(ethSummary?.ToString());
+                if (memoryCache.Get(Constants.ETH_CHANNEL_IDENTIFIER) is not CurrencySummary ethSummary)
+                {
+                    Console.WriteLine(Constants.ETH_CHANNEL_IDENTIFIER);
+                    Console.WriteLine("Not yet computed");
+                }
+                else
+                {
+                    Console.WriteLine(ethSummary?.ToString());
+                }
+            }
+            catch (IOException)
+            {
+                return;
+            }
         }
     }
 }
