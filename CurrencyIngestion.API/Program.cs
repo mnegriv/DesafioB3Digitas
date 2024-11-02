@@ -1,6 +1,5 @@
 
 using CurrencyIngestion.API.Extensions;
-using Microsoft.AspNetCore.Hosting;
 
 namespace CurrencyIngestion.API
 {
