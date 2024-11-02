@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyIngestion.Model", "CurrencyIngestion.Model\CurrencyIngestion.Model.csproj", "{7FFEFE27-93DF-4F5C-AE0A-3F04F6F0F1CD}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyIngestion.Worker", "CurrencyIngestion.Worker\CurrencyIngestion.Worker.csproj", "{FEFE20E5-50DA-40AC-911F-33E33C296BDE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyIngestion.Data", "CurrencyIngestion.Data\CurrencyIngestion.Data.csproj", "{19A7E63B-C960-4280-A84B-27722A8667B8}"
@@ -19,16 +17,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyIngestion.API", "Cu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyIngestion.Common", "CurrencyIngestion.Common\CurrencyIngestion.Common.csproj", "{40181A1D-DD65-423C-A15C-4F395E25A431}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrencyIngestion.Domain", "CurrencyIngestion.Domain\CurrencyIngestion.Domain.csproj", "{2733EC4E-5FE5-47DD-BA60-3CA6F4693BDD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7FFEFE27-93DF-4F5C-AE0A-3F04F6F0F1CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7FFEFE27-93DF-4F5C-AE0A-3F04F6F0F1CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7FFEFE27-93DF-4F5C-AE0A-3F04F6F0F1CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7FFEFE27-93DF-4F5C-AE0A-3F04F6F0F1CD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FEFE20E5-50DA-40AC-911F-33E33C296BDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FEFE20E5-50DA-40AC-911F-33E33C296BDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FEFE20E5-50DA-40AC-911F-33E33C296BDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -53,6 +49,10 @@ Global
 		{40181A1D-DD65-423C-A15C-4F395E25A431}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40181A1D-DD65-423C-A15C-4F395E25A431}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40181A1D-DD65-423C-A15C-4F395E25A431}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2733EC4E-5FE5-47DD-BA60-3CA6F4693BDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2733EC4E-5FE5-47DD-BA60-3CA6F4693BDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2733EC4E-5FE5-47DD-BA60-3CA6F4693BDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2733EC4E-5FE5-47DD-BA60-3CA6F4693BDD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

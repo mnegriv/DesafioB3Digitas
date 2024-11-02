@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace CurrencyIngestion.Model
+namespace CurrencyIngestion.Worker.Model
 {
     public record ChannelData
     {

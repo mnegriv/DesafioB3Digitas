@@ -1,5 +1,5 @@
 ﻿using CurrencyIngestion.Data;
-using CurrencyIngestion.Model;
+using CurrencyIngestion.Domain;
 using CurrencyIngestion.Service;
 using Microsoft.Extensions.Caching.Memory;
 

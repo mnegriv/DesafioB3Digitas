@@ -1,6 +1,6 @@
 ﻿using CurrencyIngestion.Common.Enums;
 using CurrencyIngestion.Data;
-using CurrencyIngestion.Model;
+using CurrencyIngestion.Domain;
 using CurrencyIngestion.Service;
 using CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler;
 using Microsoft.Extensions.Caching.Memory;

@@ -1,4 +1,4 @@
-﻿using CurrencyIngestion.Model;
+﻿using CurrencyIngestion.Domain;
 
 namespace CurrencyIngestion.Service
 {

@@ -1,4 +1,4 @@
-﻿using CurrencyIngestion.Model;
+﻿using CurrencyIngestion.Domain;
 using Dapper;
 using System.Data.SqlClient;
 using System.Text.Json;
@@ -14,7 +14,7 @@ namespace CurrencyIngestion.Data
             this.connString = connString;
         }
 
-        public async Task Save(ExchangeSimulationModel exchangeSimulation)
+        public async Task Save(ExchangeSimulation exchangeSimulation)
         {
             using var connection = new SqlConnection(connString);
 

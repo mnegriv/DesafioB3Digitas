@@ -1,6 +1,6 @@
 ﻿using CurrencyIngestion.Common;
 using CurrencyIngestion.Common.Enums;
-using CurrencyIngestion.Model;
+using CurrencyIngestion.Domain;
 using Microsoft.Extensions.Caching.Memory;
 using System.Net.WebSockets;
 

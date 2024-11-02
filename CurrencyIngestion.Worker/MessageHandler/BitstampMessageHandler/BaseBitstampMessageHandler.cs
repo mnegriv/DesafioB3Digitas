@@ -1,4 +1,4 @@
-﻿using CurrencyIngestion.Model;
+﻿using CurrencyIngestion.Domain;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler

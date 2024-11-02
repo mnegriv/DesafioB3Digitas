@@ -1,8 +1,8 @@
 ﻿using CurrencyIngestion.Common.Enums;
-using CurrencyIngestion.Common.Extension;
-using CurrencyIngestion.Model;
+using CurrencyIngestion.Domain;
+using CurrencyIngestion.Domain.Extensions;
 
-namespace CurrencyIngestion.Test.CurrencyIngestion.Common.Test.Extension
+namespace CurrencyIngestion.Test.CurrencyIngestion.Domain.Test.Extensions
 {
     public class OrderBookExtensionTests
     {
@@ -23,9 +23,9 @@ namespace CurrencyIngestion.Test.CurrencyIngestion.Common.Test.Extension
 
             var converted = orderBook.ToAskOperations(CurrencyPair.BTCUSD).ToList();
 
-            Assert.IsAssignableFrom<IEnumerable<Operation>>(converted);
+            Assert.IsAssignableFrom<IEnumerable<ExchangeOperation>>(converted);
             Assert.NotEmpty(converted);
-            Assert.Equal("BTCUSD", converted.First().Currency);
+            Assert.Equal(CurrencyPair.BTCUSD, converted.First().Currency);
             Assert.Equal(100.5m, converted.First().Price);
             Assert.Equal(0.1m, converted.First().Amount);
         }
@@ -41,7 +41,7 @@ namespace CurrencyIngestion.Test.CurrencyIngestion.Common.Test.Extension
 
             var converted = orderBook.ToAskOperations(CurrencyPair.BTCUSD).ToList();
 
-            Assert.IsAssignableFrom<IEnumerable<Operation>>(converted);
+            Assert.IsAssignableFrom<IEnumerable<ExchangeOperation>>(converted);
             Assert.Empty(converted);
         }
 
@@ -62,9 +62,9 @@ namespace CurrencyIngestion.Test.CurrencyIngestion.Common.Test.Extension
 
             var converted = orderBook.ToAskOperations(CurrencyPair.BTCUSD).ToList();
 
-            Assert.IsAssignableFrom<IEnumerable<Operation>>(converted);
+            Assert.IsAssignableFrom<IEnumerable<ExchangeOperation>>(converted);
             Assert.NotEmpty(converted);
-            Assert.Equal("BTCUSD", converted.First().Currency);
+            Assert.Equal(CurrencyPair.BTCUSD, converted.First().Currency);
             Assert.Equal(0m, converted.First().Price);
             Assert.Equal(0m, converted.First().Amount);
         }
@@ -86,9 +86,9 @@ namespace CurrencyIngestion.Test.CurrencyIngestion.Common.Test.Extension
 
             var converted = orderBook.ToBidOperations(CurrencyPair.BTCUSD).ToList();
 
-            Assert.IsAssignableFrom<IEnumerable<Operation>>(converted);
+            Assert.IsAssignableFrom<IEnumerable<ExchangeOperation>>(converted);
             Assert.NotEmpty(converted);
-            Assert.Equal("BTCUSD", converted.First().Currency);
+            Assert.Equal(CurrencyPair.BTCUSD, converted.First().Currency);
             Assert.Equal(700.5m, converted.First().Price);
             Assert.Equal(0.5m, converted.First().Amount);
         }
@@ -104,7 +104,7 @@ namespace CurrencyIngestion.Test.CurrencyIngestion.Common.Test.Extension
 
             var converted = orderBook.ToBidOperations(CurrencyPair.BTCUSD).ToList();
 
-            Assert.IsAssignableFrom<IEnumerable<Operation>>(converted);
+            Assert.IsAssignableFrom<IEnumerable<ExchangeOperation>>(converted);
             Assert.Empty(converted);
         }
 
@@ -125,9 +125,9 @@ namespace CurrencyIngestion.Test.CurrencyIngestion.Common.Test.Extension
 
             var converted = orderBook.ToBidOperations(CurrencyPair.BTCUSD).ToList();
 
-            Assert.IsAssignableFrom<IEnumerable<Operation>>(converted);
+            Assert.IsAssignableFrom<IEnumerable<ExchangeOperation>>(converted);
             Assert.NotEmpty(converted);
-            Assert.Equal("BTCUSD", converted.First().Currency);
+            Assert.Equal(CurrencyPair.BTCUSD, converted.First().Currency);
             Assert.Equal(0m, converted.First().Price);
             Assert.Equal(0m, converted.First().Amount);
         }

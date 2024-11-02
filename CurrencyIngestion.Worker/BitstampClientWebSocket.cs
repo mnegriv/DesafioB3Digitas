@@ -1,8 +1,8 @@
-﻿using CurrencyIngestion.Model;
-using System.Net.WebSockets;
+﻿using System.Net.WebSockets;
 using System.Text.Json;
 using System.Text;
 using CurrencyIngestion.Common.Enums;
+using CurrencyIngestion.Worker.Model;
 
 namespace CurrencyIngestion.Worker
 {

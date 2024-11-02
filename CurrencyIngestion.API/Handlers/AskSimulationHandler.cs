@@ -1,8 +1,8 @@
 ﻿using CurrencyIngestion.API.Payload;
 using CurrencyIngestion.Common.Enums;
-using CurrencyIngestion.Common.Extension;
 using CurrencyIngestion.Data;
-using CurrencyIngestion.Model;
+using CurrencyIngestion.Domain;
+using CurrencyIngestion.Domain.Extensions;
 using CurrencyIngestion.Service;
 using MediatR;
 
@@ -37,8 +37,8 @@ namespace CurrencyIngestion.API.Handlers
 
             var askOperations = latestOrderBook.ToAskOperations(request.Currency).ToList();
 
-            ExchangeSimulationModel simulationModel = exchangeSimulationService.SimulateAskOperation(
-                $"{request.Currency}",
+            ExchangeSimulation simulationModel = exchangeSimulationService.SimulateAskOperation(
+                request.Currency,
                 askRequest.Amount,
                 askOperations);
 

@@ -1,9 +1,9 @@
-﻿using CurrencyIngestion.Model;
+﻿using CurrencyIngestion.Domain;
 
 namespace CurrencyIngestion.Data
 {
     public interface IExchangeSimulationRepository
     {
-        Task Save(ExchangeSimulationModel exchangeSimulationModel);
+        Task Save(ExchangeSimulation exchangeSimulationModel);
     }
 }

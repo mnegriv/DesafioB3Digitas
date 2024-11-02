@@ -1,33 +1,33 @@
 ﻿using CurrencyIngestion.Common.Enums;
-using CurrencyIngestion.Model;
+using CurrencyIngestion.Domain;
 
 namespace CurrencyIngestion.Service
 {
     public class ExchangeSimulationService : IExchangeSimulationService
     {
-        public ExchangeSimulationModel SimulateAskOperation(string currency, decimal amountRequested, List<Operation> operations)
+        public ExchangeSimulation SimulateAskOperation(CurrencyPair currency, decimal amountRequested, List<AskOperation> operations)
         {
-            ExchangeSimulationModel simulationModel = new(currency, $"{OperationType.Ask}");
+            ExchangeSimulation simulationModel = new(currency, OperationType.Ask);
 
-            Queue<Operation> operationQueue = new(operations.OrderBy(o => o.Price));
+            Queue<ExchangeOperation> operationQueue = new(operations.OrderBy(o => o.Price));
 
             return SimulateOperation(amountRequested, operationQueue, simulationModel);
         }
 
-        public ExchangeSimulationModel SimulateBidOperation(string currency, decimal amountRequested, List<Operation> operations)
+        public ExchangeSimulation SimulateBidOperation(CurrencyPair currency, decimal amountRequested, List<BidOperation> operations)
         {
-            ExchangeSimulationModel simulationModel = new(currency, $"{OperationType.Bid}");
+            ExchangeSimulation simulationModel = new(currency, OperationType.Bid);
 
-            Queue<Operation> operationQueue = new(operations.OrderByDescending(o => o.Price));
+            Queue<ExchangeOperation> operationQueue = new(operations.OrderByDescending(o => o.Price));
 
             return SimulateOperation(amountRequested, operationQueue, simulationModel);
         }
 
-        private static ExchangeSimulationModel SimulateOperation(decimal amountRequested, Queue<Operation> operationsQueue, ExchangeSimulationModel simulationModel)
+        private static ExchangeSimulation SimulateOperation(decimal amountRequested, Queue<ExchangeOperation> operationsQueue, ExchangeSimulation simulationModel)
         {
             while (simulationModel.TotalAmount <= amountRequested & operationsQueue.Any())
             {
-                if (operationsQueue.TryDequeue(out Operation? operation) && operation != null)
+                if (operationsQueue.TryDequeue(out ExchangeOperation? operation) && operation != null)
                 {
                     simulationModel.AddOperation(operation);
                     simulationModel.IncrementTotalPrice(operation.Price, operation.Amount);

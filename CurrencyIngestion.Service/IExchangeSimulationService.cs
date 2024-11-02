@@ -1,10 +1,11 @@
-﻿using CurrencyIngestion.Model;
+﻿using CurrencyIngestion.Common.Enums;
+using CurrencyIngestion.Domain;
 
 namespace CurrencyIngestion.Service
 {
     public interface IExchangeSimulationService
     {
-        ExchangeSimulationModel SimulateAskOperation(string currency, decimal amountRequested, List<Operation> operations);
-        ExchangeSimulationModel SimulateBidOperation(string currency, decimal amountRequested, List<Operation> operations);
+        ExchangeSimulation SimulateAskOperation(CurrencyPair currency, decimal amountRequested, List<AskOperation> operations);
+        ExchangeSimulation SimulateBidOperation(CurrencyPair currency, decimal amountRequested, List<BidOperation> operations);
     }
 }

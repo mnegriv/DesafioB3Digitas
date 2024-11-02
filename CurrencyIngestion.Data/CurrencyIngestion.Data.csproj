@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CurrencyIngestion.Common\CurrencyIngestion.Common.csproj" />
-    <ProjectReference Include="..\CurrencyIngestion.Model\CurrencyIngestion.Model.csproj" />
+    <ProjectReference Include="..\CurrencyIngestion.Domain\CurrencyIngestion.Domain.csproj" />
   </ItemGroup>
 
 </Project>

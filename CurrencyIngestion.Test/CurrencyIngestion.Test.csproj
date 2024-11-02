@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CurrencyIngestion.API\CurrencyIngestion.API.csproj" />
+    <ProjectReference Include="..\CurrencyIngestion.Domain\CurrencyIngestion.Domain.csproj" />
     <ProjectReference Include="..\CurrencyIngestion.Service\CurrencyIngestion.Service.csproj" />
     <ProjectReference Include="..\CurrencyIngestion.Worker\CurrencyIngestion.Worker.csproj" />
   </ItemGroup>

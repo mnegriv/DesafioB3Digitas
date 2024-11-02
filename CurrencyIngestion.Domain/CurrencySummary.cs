@@ -1,10 +1,10 @@
 ﻿using System.Text;
 
-namespace CurrencyIngestion.Model
+namespace CurrencyIngestion.Domain
 {
     public record CurrencySummary(
         string Currency,
-        decimal HighestPrice, 
+        decimal HighestPrice,
         decimal LowestPrice,
         decimal AveragePriceCurrent,
         decimal AveragePriceWithPrevious,

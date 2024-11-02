@@ -1,4 +1,5 @@
-﻿using CurrencyIngestion.Model;
+﻿using CurrencyIngestion.Common.Enums;
+using CurrencyIngestion.Domain;
 using CurrencyIngestion.Service;
 
 namespace CurrencyIngestion.Test.CurrencyIngestion.Service.Test
@@ -10,15 +11,15 @@ namespace CurrencyIngestion.Test.CurrencyIngestion.Service.Test
         {
             var service = new ExchangeSimulationService();
 
-            List<Operation> operations = new()
+            List<AskOperation> operations = new()
             {
-                new Operation { Amount = 0.1m, Price = 200 },
-                new Operation { Amount = 0.2m, Price = 210 },
-                new Operation { Amount = 0.3m, Price = 220 },
-                new Operation { Amount = 0.4m, Price = 230 },
+                new AskOperation(Amount: 0.1m, Price: 200, Currency: CurrencyPair.BTCUSD),
+                new AskOperation(Amount: 0.2m, Price: 210, Currency: CurrencyPair.BTCUSD),
+                new AskOperation(Amount: 0.3m, Price: 220, Currency: CurrencyPair.BTCUSD),
+                new AskOperation(Amount: 0.4m, Price: 230, Currency: CurrencyPair.BTCUSD),
             };
 
-            ExchangeSimulationModel result = service.SimulateAskOperation("BTC", 1, operations);
+            ExchangeSimulation result = service.SimulateAskOperation(CurrencyPair.BTCUSD, 1, operations);
 
             Assert.NotNull(result);
             Assert.Equal(220, result.TotalPrice);
@@ -30,15 +31,15 @@ namespace CurrencyIngestion.Test.CurrencyIngestion.Service.Test
         {
             var service = new ExchangeSimulationService();
 
-            List<Operation> operations = new()
+            List<BidOperation> operations = new()
             {
-                new Operation { Amount = 0.1m, Price = 200 },
-                new Operation { Amount = 0.2m, Price = 210 },
-                new Operation { Amount = 0.3m, Price = 220 },
-                new Operation { Amount = 0.4m, Price = 230 },
+                new BidOperation(Amount: 0.1m, Price: 200, Currency: CurrencyPair.BTCUSD),
+                new BidOperation(Amount: 0.2m, Price: 210, Currency: CurrencyPair.BTCUSD),
+                new BidOperation(Amount: 0.3m, Price: 220, Currency: CurrencyPair.BTCUSD),
+                new BidOperation(Amount: 0.4m, Price: 230, Currency: CurrencyPair.BTCUSD),
             };
 
-            ExchangeSimulationModel result = service.SimulateBidOperation("BTC", 1, operations);
+            ExchangeSimulation result = service.SimulateBidOperation(CurrencyPair.BTCUSD, 1, operations);
 
             Assert.NotNull(result);
             Assert.Equal(220, result.TotalPrice);
@@ -50,9 +51,9 @@ namespace CurrencyIngestion.Test.CurrencyIngestion.Service.Test
         {
             var service = new ExchangeSimulationService();
 
-            List<Operation> operations = new() { };
+            List<AskOperation> operations = new() { };
 
-            ExchangeSimulationModel result = service.SimulateAskOperation("BTC", 1, operations);
+            ExchangeSimulation result = service.SimulateAskOperation(CurrencyPair.BTCUSD, 1, operations);
 
             Assert.NotNull(result);
             Assert.Equal(0, result.TotalPrice);

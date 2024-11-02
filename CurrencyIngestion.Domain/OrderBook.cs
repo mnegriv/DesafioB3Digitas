@@ -1,9 +1,9 @@
 ﻿using System.Text.Json;
 
-namespace CurrencyIngestion.Model
+namespace CurrencyIngestion.Domain
 {
-    public record OrderBook 
-    { 
+    public record OrderBook
+    {
         public OrderData? Data { get; init; }
         public string Channel { get; init; } = string.Empty;
         public string Event { get; init; } = string.Empty;
@@ -24,7 +24,7 @@ namespace CurrencyIngestion.Model
         }
     }
 
-    public record OrderData 
+    public record OrderData
     {
         public string? Timestamp { get; init; }
         public List<List<string>> Bids { get; init; } = new List<List<string>>();

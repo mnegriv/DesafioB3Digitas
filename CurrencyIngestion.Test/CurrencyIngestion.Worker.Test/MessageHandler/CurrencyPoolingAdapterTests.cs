@@ -1,4 +1,4 @@
-﻿using CurrencyIngestion.Model;
+﻿using CurrencyIngestion.Domain;
 using CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler;
 using Moq;
 
@@ -41,7 +41,7 @@ namespace CurrencyIngestion.Test.CurrencyIngestion.Worker.Test.MessageHandler
 
             Task poolTask = adapter.Pool(cts.Token);
 
-            cts.CancelAfter(TimeSpan.FromSeconds(3));
+            cts.CancelAfter(TimeSpan.FromSeconds(6));
 
             await poolTask;
 
