@@ -3,7 +3,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler
 {
-    public abstract class BaseBitstampMessageHandler
+    public abstract class BaseBitstampMessageHandler : IBitstampMessageHandler
     {
         private readonly IMemoryCache memoryCache;
 
@@ -30,11 +30,13 @@ namespace CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler
             return previousOrderBookBtc;
         }
 
-        protected static void PrintCurrentStatus(CurrencySummary currencySummary, int top)
+        protected OrderBook? GetOrderBookFromMessage(string messageReceived)
         {
-            Console.SetCursorPosition(0, top);
-            Console.WriteLine(currencySummary.ToString());
-            Console.SetCursorPosition(0, 5);
+            OrderBook? orderBook = OrderBook.FromJson(messageReceived);
+
+            return orderBook;
         }
+
+        public abstract Task<CurrencySummary> Handle(string messageReceived);
     }
 }

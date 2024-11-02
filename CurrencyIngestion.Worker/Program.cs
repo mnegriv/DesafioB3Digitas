@@ -1,5 +1,6 @@
 using CurrencyIngestion.Data;
 using CurrencyIngestion.Service;
+using CurrencyIngestion.Worker.MessageHandler;
 using CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler;
 
 namespace CurrencyIngestion.Worker
@@ -11,7 +12,7 @@ namespace CurrencyIngestion.Worker
             IHost host = Host.CreateDefaultBuilder(args)
                 .ConfigureServices(services =>
                 {
-                    services.AddHostedService<Worker>();
+                    services.AddHostedService<WorkerService>();
                     services.AddMemoryCache();
                     services.AddSingleton<ICurrencyRepository>(c =>
                     {
@@ -21,6 +22,7 @@ namespace CurrencyIngestion.Worker
                     });
                     services.AddSingleton<ICurrencySummaryCalculator, CurrencySummaryCalculator>();
                     services.AddSingleton<IBitstampMessageHandlerFactory, BitstampMessageHandlerFactory>();
+                    services.AddSingleton<ICurrencyPoolingAdapter, CurrencyPoolingAdapter>();
                 })
                 .Build();
 

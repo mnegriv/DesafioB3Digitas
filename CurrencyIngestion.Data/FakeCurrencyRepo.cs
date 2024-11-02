@@ -1,7 +1,9 @@
 ﻿using CurrencyIngestion.Common.Enums;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CurrencyIngestion.Data
 {
+    [ExcludeFromCodeCoverage]
     public class FakeCurrencyRepo : ICurrencyRepository
     {
         public Task<IEnumerable<string>> GetAll(CurrencyPair currency)

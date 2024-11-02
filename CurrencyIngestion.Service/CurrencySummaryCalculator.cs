@@ -25,7 +25,8 @@ namespace CurrencyIngestion.Service
                 LowestPrice: lowestPrice,
                 AveragePriceCurrent: averagePriceCurrent,
                 AveragePriceWithPrevious: AveragePriceWithPrevious,
-                AveragePriceCumulative: averagePriceCumulative);
+                AveragePriceCumulative: averagePriceCumulative,
+                DateTime.Now);
 
             return summary;
         }

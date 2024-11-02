@@ -8,13 +8,14 @@ namespace CurrencyIngestion.Model
         decimal LowestPrice,
         decimal AveragePriceCurrent,
         decimal AveragePriceWithPrevious,
-        decimal AveragePriceCumulative)
+        decimal AveragePriceCumulative,
+        DateTime UpdateTime)
     {
         public override string ToString()
         {
             StringBuilder sb = new();
             sb.AppendLine(Currency);
-            sb.AppendLine($"Time: {DateTime.Now.ToLocalTime().ToString("dd/MM HH:mm:ss")}");
+            sb.AppendLine($"Time: {UpdateTime.ToLocalTime().ToString("dd/MM HH:mm:ss")}");
             sb.AppendLine($"Highest Price: {HighestPrice}");
             sb.AppendLine($"Lowest Price: {LowestPrice}");
             sb.AppendLine($"Current Average Price: {Math.Round(AveragePriceCurrent, 2)}");

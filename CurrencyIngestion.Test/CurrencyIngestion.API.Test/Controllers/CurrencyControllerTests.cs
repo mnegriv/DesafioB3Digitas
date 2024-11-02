@@ -5,6 +5,7 @@ using System.Net.Http.Json;
 
 namespace CurrencyIngestion.Test.CurrencyIngestion.API.Test.Controllers
 {
+    [Trait("Integration", "API")]
     public class CurrencyControllerTests : IClassFixture<WebApplicationFactory<Program>>
     {
         private readonly HttpClient client;

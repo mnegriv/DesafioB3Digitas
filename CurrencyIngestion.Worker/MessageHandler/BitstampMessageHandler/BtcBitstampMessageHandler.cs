@@ -21,8 +21,13 @@ namespace CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler
             this.currencySummaryCalculator = currencySummaryCalculator;
         }
 
-        public async Task Handle(OrderBook orderBook, string messageReceived)
+        public override async Task<CurrencySummary> Handle(string messageReceived)
         {
+            OrderBook? orderBook = this.GetOrderBookFromMessage(messageReceived);
+
+            if (orderBook is null)
+                return null;
+
             var cumulativeResults = await currencyRepository.GetAll(CurrencyPair.BTCUSD);
 
             OrderBook? previousOrderBookBtc = GetOrderBookFromCache(orderBook);
@@ -32,11 +37,11 @@ namespace CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler
                 previousOrderBookBtc,
                 cumulativeResults.Select(r => OrderBook.FromJson(r)));
 
-            PrintCurrentStatus(currencySummaryBtc, 7);
-
             _ = currencyRepository.Save(messageReceived, CurrencyPair.BTCUSD);
 
             SetOrderBookToCache(orderBook);
+
+            return currencySummaryBtc;
         }
     }
 }

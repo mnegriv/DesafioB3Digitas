@@ -1,30 +1,37 @@
-using System.Net.WebSockets;
+﻿using CurrencyIngestion.Common;
 using CurrencyIngestion.Common.Enums;
 using CurrencyIngestion.Model;
-using CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler;
+using Microsoft.Extensions.Caching.Memory;
+using System.Net.WebSockets;
 
-namespace CurrencyIngestion.Worker
+namespace CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler
 {
-    public class Worker : BackgroundService
+    public class CurrencyPoolingAdapter : ICurrencyPoolingAdapter
     {
-        private readonly ILogger<Worker> logger;
         private readonly IBitstampMessageHandlerFactory messageHandlerFactory;
+        private readonly IMemoryCache memoryCache;
 
-        private static readonly TimeSpan loopDelay = TimeSpan.FromSeconds(5);
-
-        public Worker(ILogger<Worker> logger, IBitstampMessageHandlerFactory messageHandlerFactory)
+        private static readonly MemoryCacheEntryOptions cacheEntryOptions = new()
         {
-            this.logger = logger;
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5),
+            SlidingExpiration = TimeSpan.FromMinutes(2)
+        };
+
+        public CurrencyPoolingAdapter(
+            IBitstampMessageHandlerFactory messageHandlerFactory, IMemoryCache memoryCache)
+        {
             this.messageHandlerFactory = messageHandlerFactory;
+            this.memoryCache = memoryCache;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        public async Task Pool(CancellationToken stoppingToken)
         {
             using var bitstampClientWebSocket = new BitstampClientWebSocket();
             try
             {
                 while (true)
                 {
+                    Console.WriteLine("Connecting...");
                     await bitstampClientWebSocket.ConnectAsync(stoppingToken);
 
                     await Task.WhenAll(
@@ -43,9 +50,10 @@ namespace CurrencyIngestion.Worker
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                logger.LogWarning(ex, "An error has occoured in the web socket client. Closing connection");
+                Console.WriteLine("An error has occoured in the web socket client. Closing connection");
+                throw;
             }
             finally
             {
@@ -65,7 +73,7 @@ namespace CurrencyIngestion.Worker
 
                 _ = HandleMessage(messageReceived);
 
-                Thread.Sleep(TimeSpan.FromSeconds(5));
+                await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
             }
         }
 
@@ -74,14 +82,26 @@ namespace CurrencyIngestion.Worker
             if (messageReceived.Equals(string.Empty))
                 return;
 
-            OrderBook? orderBook = OrderBook.FromJson(messageReceived);
+            var messageHandler = this.messageHandlerFactory.Create(messageReceived);
 
-            if (orderBook is null)
-                return;
+            var currencySummary = await messageHandler.Handle(messageReceived);
 
-            var messageHandler = this.messageHandlerFactory.Create(orderBook);
+            memoryCache.Set(currencySummary.Currency, currencySummary, cacheEntryOptions);
 
-            await messageHandler.Handle(orderBook, messageReceived);
+            PrintCurrentStatus();
+        }
+
+        private void PrintCurrentStatus()
+        {
+            Console.Clear();
+
+            Console.WriteLine("***Summary***");
+
+            var btcSummary = memoryCache.Get(Constants.BTC_CHANNEL_IDENTIFIER) as CurrencySummary;
+            Console.WriteLine(btcSummary?.ToString());
+
+            var ethSummary = memoryCache.Get(Constants.ETH_CHANNEL_IDENTIFIER) as CurrencySummary;
+            Console.WriteLine(ethSummary?.ToString());
         }
     }
 }

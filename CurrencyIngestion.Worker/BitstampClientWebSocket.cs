@@ -23,16 +23,6 @@ namespace CurrencyIngestion.Worker
             await WebSocket.ConnectAsync(bitstampUri, cancellationToken);
         }
 
-        public async Task CloseAsync(CancellationToken cancellationToken)
-        {
-            if (WebSocket is null)
-            {
-                return;
-            }
-
-            await WebSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing", CancellationToken.None);
-        }
-
         public async Task<string> Subscribe(CurrencyPair currencyPair)
         {
             if (WebSocket is null)

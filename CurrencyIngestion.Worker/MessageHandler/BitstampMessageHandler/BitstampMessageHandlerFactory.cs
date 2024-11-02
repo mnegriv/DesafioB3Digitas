@@ -14,23 +14,25 @@ namespace CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler
             this.serviceProvider = serviceProvider;
         }
 
-        public IBitstampMessageHandler Create(OrderBook orderBook)
+        public IBitstampMessageHandler Create(string message)
         {
+            var channel = OrderBook.FromJson(message)?.Channel;
+
             var memoryCache = serviceProvider.GetRequiredService<IMemoryCache>();
             var currencyRepository = serviceProvider.GetRequiredService<ICurrencyRepository>();
             var currencySummaryCalculator = serviceProvider.GetRequiredService<ICurrencySummaryCalculator>();
 
-            if (orderBook.Channel == Common.Constants.BTC_CHANNEL_IDENTIFIER)
+            if (channel == Common.Constants.BTC_CHANNEL_IDENTIFIER)
             {
                 return new BtcBitstampMessageHandler(memoryCache, currencyRepository, currencySummaryCalculator);
             }
 
-            if (orderBook.Channel == Common.Constants.ETH_CHANNEL_IDENTIFIER)
+            if (channel == Common.Constants.ETH_CHANNEL_IDENTIFIER)
             {
                 return new EthBitstampMessageHandler(memoryCache, currencyRepository, currencySummaryCalculator);
             }
 
-            throw new InvalidOperationException($"This message channel is not supported: {orderBook.Channel}");
+            throw new InvalidOperationException($"This message channel is not supported: {channel}");
         }
     }
 }
