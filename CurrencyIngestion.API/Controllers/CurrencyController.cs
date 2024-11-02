@@ -22,7 +22,7 @@ namespace CurrencyIngestion.API.Controllers
         {
             Result result = await mediator.Send(new AskSimulationCommand(request, CurrencyPair.BTCUSD));
 
-            if (request is null)
+            if (result is null)
                 return NoContent();
 
             return Ok(result);
@@ -33,7 +33,7 @@ namespace CurrencyIngestion.API.Controllers
         {
             Result result = await mediator.Send(new BidSimulationCommand(request, CurrencyPair.BTCUSD));
 
-            if (request is null)
+            if (result is null)
                 return NoContent();
 
             return Ok(result);
@@ -44,7 +44,7 @@ namespace CurrencyIngestion.API.Controllers
         {
             Result result = await mediator.Send(new AskSimulationCommand(request, CurrencyPair.ETHUSD));
 
-            if (request is null)
+            if (result is null)
                 return NoContent();
 
             return Ok(result);
@@ -55,7 +55,7 @@ namespace CurrencyIngestion.API.Controllers
         {
             Result result = await mediator.Send(new BidSimulationCommand(request, CurrencyPair.ETHUSD));
 
-            if (request is null)
+            if (result is null)
                 return NoContent();
 
             return Ok(result);

@@ -6,7 +6,7 @@ using CurrencyIngestion.API.Payload;
 using CurrencyIngestion.Common.Enums;
 using CurrencyIngestion.Model;
 
-namespace CurrencyIngestion.Test.CurrencyIngestion.API.Handlers
+namespace CurrencyIngestion.Test.CurrencyIngestion.API.Test.Handlers
 {
     public class AskSimulationHandlerTests
     {

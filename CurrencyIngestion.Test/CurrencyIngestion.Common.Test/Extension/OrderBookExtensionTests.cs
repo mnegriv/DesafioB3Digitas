@@ -2,7 +2,7 @@
 using CurrencyIngestion.Common.Extension;
 using CurrencyIngestion.Model;
 
-namespace CurrencyIngestion.Test.CurrencyIngestion.Common.Extension
+namespace CurrencyIngestion.Test.CurrencyIngestion.Common.Test.Extension
 {
     public class OrderBookExtensionTests
     {

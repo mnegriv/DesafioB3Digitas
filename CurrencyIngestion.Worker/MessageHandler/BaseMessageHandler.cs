@@ -7,6 +7,12 @@ namespace CurrencyIngestion.Worker.MessageHandler
     {
         private readonly IMemoryCache memoryCache;
 
+        private static readonly MemoryCacheEntryOptions cacheEntryOptions = new()
+        {
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5),
+            SlidingExpiration = TimeSpan.FromMinutes(2)
+        };
+
         protected BaseMessageHandler(IMemoryCache memoryCache)
         {
             this.memoryCache = memoryCache;
@@ -14,7 +20,7 @@ namespace CurrencyIngestion.Worker.MessageHandler
 
         protected void SetOrderBookToCache(OrderBook orderBook)
         {
-            memoryCache.Set(orderBook.Channel, orderBook);
+            memoryCache.Set(orderBook.Channel, orderBook, cacheEntryOptions);
         }
 
         protected OrderBook? GetOrderBookFromCache(OrderBook orderBook)

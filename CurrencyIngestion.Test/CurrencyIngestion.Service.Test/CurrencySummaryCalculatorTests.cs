@@ -1,7 +1,7 @@
 using CurrencyIngestion.Model;
 using CurrencyIngestion.Service;
 
-namespace CurrencyIngestion.Test.CurrencyIngestion.Service
+namespace CurrencyIngestion.Test.CurrencyIngestion.Service.Test
 {
     public class CurrencySummaryCalculatorTests
     {

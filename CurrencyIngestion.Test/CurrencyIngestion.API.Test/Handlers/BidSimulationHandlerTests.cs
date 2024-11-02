@@ -6,7 +6,7 @@ using CurrencyIngestion.Model;
 using CurrencyIngestion.Service;
 using Moq;
 
-namespace CurrencyIngestion.Test.CurrencyIngestion.API.Handlers
+namespace CurrencyIngestion.Test.CurrencyIngestion.API.Test.Handlers
 {
     public class BidSimulationHandlerTests
     {
