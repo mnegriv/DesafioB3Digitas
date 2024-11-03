@@ -1,15 +1,13 @@
-using CurrencyIngestion.Worker.MessageHandler;
-
 namespace CurrencyIngestion.Worker
 {
     public class WorkerService : BackgroundService
     {
         private readonly ILogger<WorkerService> logger;
-        private readonly ICurrencyPoolingAdapter currencyPoolingAdapter;
+        private readonly ILiveOrderBookPoolingAdapter currencyPoolingAdapter;
 
         public WorkerService(
             ILogger<WorkerService> logger,
-            ICurrencyPoolingAdapter currencyPoolingAdapter)
+            ILiveOrderBookPoolingAdapter currencyPoolingAdapter)
         {
             this.logger = logger;
             this.currencyPoolingAdapter = currencyPoolingAdapter;

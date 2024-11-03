@@ -8,16 +8,16 @@ namespace CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler
 {
     public class BtcBitstampMessageHandler : BaseBitstampMessageHandler, IBitstampMessageHandler
     {
-        private readonly ICurrencyRepository currencyRepository;
+        private readonly IOrderBookRepository orderBookRepository;
         private readonly ICurrencySummaryCalculator currencySummaryCalculator;
 
         public BtcBitstampMessageHandler(
             IMemoryCache memoryCache,
-            ICurrencyRepository currencyRepository,
+            IOrderBookRepository orderBookRepository,
             ICurrencySummaryCalculator currencySummaryCalculator)
             : base(memoryCache)
         {
-            this.currencyRepository = currencyRepository;
+            this.orderBookRepository = orderBookRepository;
             this.currencySummaryCalculator = currencySummaryCalculator;
         }
 
@@ -28,7 +28,7 @@ namespace CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler
             if (orderBook is null)
                 return null;
 
-            var cumulativeResults = await currencyRepository.GetAll(CurrencyPair.BTCUSD);
+            var cumulativeResults = await orderBookRepository.GetAll(CurrencyPair.BTCUSD);
 
             OrderBook? previousOrderBookBtc = GetOrderBookFromCache(orderBook);
 
@@ -37,7 +37,7 @@ namespace CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler
                 previousOrderBookBtc,
                 cumulativeResults.Select(r => OrderBook.FromJson(r)));
 
-            _ = currencyRepository.Save(messageReceived, CurrencyPair.BTCUSD);
+            _ = orderBookRepository.Save(messageReceived, CurrencyPair.BTCUSD);
 
             SetOrderBookToCache(orderBook);
 

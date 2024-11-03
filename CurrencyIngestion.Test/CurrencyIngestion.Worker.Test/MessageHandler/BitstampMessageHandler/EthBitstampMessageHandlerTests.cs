@@ -21,7 +21,7 @@ namespace CurrencyIngestion.Test.CurrencyIngestion.Worker.Test.MessageHandler.Bi
         public async Task Given_EthBitstampMessage_When_HandlerMessage_Then_MessageHandlerRan()
         {
             IMemoryCache memoryCache = memoryCacheFixture.CreateMemoryCache();
-            var currencyRepositoryMock = new Mock<ICurrencyRepository>();
+            var orderBookRepositoryMock = new Mock<IOrderBookRepository>();
             var currencySummaryCalculatorMock = new Mock<ICurrencySummaryCalculator>();
 
             currencySummaryCalculatorMock
@@ -42,7 +42,7 @@ namespace CurrencyIngestion.Test.CurrencyIngestion.Worker.Test.MessageHandler.Bi
 
             var messageHandler = new EthBitstampMessageHandler(
                 memoryCache,
-                currencyRepositoryMock.Object,
+                orderBookRepositoryMock.Object,
                 currencySummaryCalculatorMock.Object
                 );
 
@@ -50,10 +50,10 @@ namespace CurrencyIngestion.Test.CurrencyIngestion.Worker.Test.MessageHandler.Bi
 
             await messageHandler.Handle(message);
 
-            currencyRepositoryMock
+            orderBookRepositoryMock
                 .Verify(x => x.GetAll(CurrencyPair.ETHUSD), Times.Once);
 
-            currencyRepositoryMock
+            orderBookRepositoryMock
                 .Verify(x => x.Save(It.IsAny<string>(), It.IsAny<CurrencyPair>()), Times.Once);
 
             currencySummaryCalculatorMock

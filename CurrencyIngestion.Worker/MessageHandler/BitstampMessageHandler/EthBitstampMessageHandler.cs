@@ -8,16 +8,16 @@ namespace CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler
 {
     public class EthBitstampMessageHandler : BaseBitstampMessageHandler, IBitstampMessageHandler
     {
-        private readonly ICurrencyRepository currencyRepository;
+        private readonly IOrderBookRepository orderBookRepository;
         private readonly ICurrencySummaryCalculator currencySummaryCalculator;
 
         public EthBitstampMessageHandler(
             IMemoryCache memoryCache,
-            ICurrencyRepository currencyRepository,
+            IOrderBookRepository orderBookRepository,
             ICurrencySummaryCalculator currencySummaryCalculator)
             : base(memoryCache)
         {
-            this.currencyRepository = currencyRepository;
+            this.orderBookRepository = orderBookRepository;
             this.currencySummaryCalculator = currencySummaryCalculator;
         }
 
@@ -28,7 +28,7 @@ namespace CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler
             if (orderBook is null)
                 return null;
 
-            var cumulativeResults = await currencyRepository.GetAll(CurrencyPair.ETHUSD);
+            var cumulativeResults = await orderBookRepository.GetAll(CurrencyPair.ETHUSD);
 
             OrderBook? previoussOrderBookEth = GetOrderBookFromCache(orderBook);
 
@@ -37,7 +37,7 @@ namespace CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler
                 previoussOrderBookEth,
                 cumulativeResults.Select(r => OrderBook.FromJson(r)));
 
-            _ = currencyRepository.Save(messageReceived, CurrencyPair.ETHUSD);
+            _ = orderBookRepository.Save(messageReceived, CurrencyPair.ETHUSD);
 
             SetOrderBookToCache(orderBook);
 

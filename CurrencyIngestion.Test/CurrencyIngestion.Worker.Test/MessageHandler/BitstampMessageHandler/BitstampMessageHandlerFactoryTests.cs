@@ -48,7 +48,7 @@ namespace CurrencyIngestion.Test.CurrencyIngestion.Worker.Test.MessageHandler.Bi
         private BitstampMessageHandlerFactory CreateFactory()
         {
             serviceCollection.AddSingleton(Mock.Of<IMemoryCache>());
-            serviceCollection.AddSingleton(Mock.Of<ICurrencyRepository>());
+            serviceCollection.AddSingleton(Mock.Of<IOrderBookRepository>());
             serviceCollection.AddSingleton(Mock.Of<ICurrencySummaryCalculator>());
 
             var provider = serviceCollection.BuildServiceProvider();

@@ -22,7 +22,7 @@ namespace CurrencyIngestion.Test.CurrencyIngestion.Worker.Test.MessageHandler.Bi
         public async Task Given_BtcBitstampMessage_When_HandlerMessage_Then_MessageHandlerRan()
         {
             IMemoryCache memoryCache = memoryCacheFixture.CreateMemoryCache();
-            var currencyRepositoryMock = new Mock<ICurrencyRepository>();
+            var orderBookRepositoryMock = new Mock<IOrderBookRepository>();
             var currencySummaryCalculatorMock = new Mock<ICurrencySummaryCalculator>();
 
             currencySummaryCalculatorMock
@@ -43,7 +43,7 @@ namespace CurrencyIngestion.Test.CurrencyIngestion.Worker.Test.MessageHandler.Bi
 
             var messageHandler = new BtcBitstampMessageHandler(
                 memoryCache,
-                currencyRepositoryMock.Object,
+                orderBookRepositoryMock.Object,
                 currencySummaryCalculatorMock.Object
                 );
 
@@ -51,10 +51,10 @@ namespace CurrencyIngestion.Test.CurrencyIngestion.Worker.Test.MessageHandler.Bi
 
             await messageHandler.Handle(message);
 
-            currencyRepositoryMock
+            orderBookRepositoryMock
                 .Verify(x => x.GetAll(CurrencyPair.BTCUSD), Times.Once);
 
-            currencyRepositoryMock
+            orderBookRepositoryMock
                 .Verify(x => x.Save(It.IsAny<string>(), It.IsAny<CurrencyPair>()), Times.Once);
 
             currencySummaryCalculatorMock

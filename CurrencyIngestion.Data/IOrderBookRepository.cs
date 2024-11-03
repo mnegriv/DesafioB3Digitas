@@ -2,7 +2,7 @@
 
 namespace CurrencyIngestion.Data
 {
-    public interface ICurrencyRepository
+    public interface IOrderBookRepository
     {
         Task Save(string orderBook, CurrencyPair currency);
 

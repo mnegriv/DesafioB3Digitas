@@ -1,12 +1,13 @@
 ﻿using CurrencyIngestion.Common.Enums;
 using CurrencyIngestion.Common.Extensions;
 using CurrencyIngestion.Domain;
+using CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler;
 using Microsoft.Extensions.Caching.Memory;
 using System.Net.WebSockets;
 
-namespace CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler
+namespace CurrencyIngestion.Worker
 {
-    public class CurrencyPoolingAdapter : ICurrencyPoolingAdapter
+    public class LiveOrderBookPoolingAdapter : ILiveOrderBookPoolingAdapter
     {
         private readonly IBitstampMessageHandlerFactory messageHandlerFactory;
         private readonly IMemoryCache memoryCache;
@@ -14,10 +15,10 @@ namespace CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler
         private static readonly MemoryCacheEntryOptions cacheEntryOptions = new()
         {
             AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5),
-            SlidingExpiration = TimeSpan.FromMinutes(2)
+            SlidingExpiration = TimeSpan.FromSeconds(10)
         };
 
-        public CurrencyPoolingAdapter(
+        public LiveOrderBookPoolingAdapter(
             IBitstampMessageHandlerFactory messageHandlerFactory, IMemoryCache memoryCache)
         {
             this.messageHandlerFactory = messageHandlerFactory;
@@ -34,7 +35,7 @@ namespace CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler
                     if (stoppingToken.IsCancellationRequested)
                         return;
 
-                    await bitstampClientWebSocket.ConnectAsync(stoppingToken);                    
+                    await bitstampClientWebSocket.ConnectAsync(stoppingToken);
 
                     await Task.WhenAll(
                         bitstampClientWebSocket.Subscribe(CurrencyPair.BTCUSD),
@@ -84,7 +85,7 @@ namespace CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler
             if (messageReceived.Equals(string.Empty))
                 return;
 
-            var messageHandler = this.messageHandlerFactory.Create(messageReceived);
+            var messageHandler = messageHandlerFactory.Create(messageReceived);
 
             var currencySummary = await messageHandler.Handle(messageReceived);
 
@@ -101,33 +102,26 @@ namespace CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler
 
                 Console.WriteLine("***Summary***");
 
-                string btcChannel = CurrencyPair.BTCUSD.ToOrderBookChannel();
-                string ethChannel = CurrencyPair.ETHUSD.ToOrderBookChannel();
-
-                if (memoryCache.Get(btcChannel) is not CurrencySummary btcSummary)
-                {
-                    Console.WriteLine(btcChannel);
-                    Console.WriteLine("Not yet computed");
-                }
-                else
-                {
-                    Console.WriteLine(btcSummary.ToString());
-                }
-
-                if (memoryCache.Get(ethChannel) is not CurrencySummary ethSummary)
-                {
-                    Console.WriteLine(ethChannel);
-                    Console.WriteLine("Not yet computed");
-                }
-                else
-                {
-                    Console.WriteLine(ethSummary?.ToString());
-                }
+                PrintChannelSummary(CurrencyPair.BTCUSD);
+                PrintChannelSummary(CurrencyPair.ETHUSD);
             }
             catch (IOException)
             {
                 return;
             }
+        }
+
+        private void PrintChannelSummary(CurrencyPair currency)
+        {
+            string channel = currency.ToOrderBookChannel();
+
+            if (memoryCache.Get(channel) is not CurrencySummary btcSummary)
+            {
+                Console.WriteLine(channel);
+                Console.WriteLine("Not yet computed");
+            }
+            else
+                Console.WriteLine(btcSummary.ToString());
         }
     }
 }

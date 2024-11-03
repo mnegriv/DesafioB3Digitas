@@ -17,10 +17,10 @@ namespace CurrencyIngestion.Test.CurrencyIngestion.API.Test.Handlers
             var currency = CurrencyPair.BTCUSD;
 
             var exchangeSimulationServiceMock = new Mock<IExchangeSimulationService>();
-            var currencyRepositoryMock = new Mock<ICurrencyRepository>();
+            var orderBookRepositoryMock = new Mock<IOrderBookRepository>();
             var exchangeSimulationRepositoryMock = new Mock<IExchangeSimulationRepository>();
 
-            currencyRepositoryMock
+            orderBookRepositoryMock
                 .Setup(x => x.GetLatest(CurrencyPair.BTCUSD))
                 .ReturnsAsync("{\"data\":{\"timestamp\":\"1000\",\"microtimestamp\":\"100\",\"bids\":[[\"2692.6\",\"6.87076801\"],[\"2692.2\",\"2.99973002\"],[\"2692.1\",\"7.44164460\"],[\"2692.0\",\"0.00000000\"],[\"2691.6\",\"0.00000000\"],[\"2690.9\",\"11.14847684\"],[\"2688.1\",\"14.05268174\"],[\"2686.9\",\"37.21675218\"]],\"asks\":[[\"2692.9\",\"1.29971920\"],[\"2693.0\",\"23.01866674\"],[\"2693.1\",\"8.79100000\"],[\"2693.2\",\"7.42612587\"],[\"2693.3\",\"5.57092719\"],[\"2694.7\",\"0.00000000\"],[\"2695.0\",\"0.85261537\"],[\"2697.0\",\"1.62000000\"],[\"2697.2\",\"0.00000000\"],[\"2697.5\",\"38.69136954\"]]},\"channel\":\"diff_order_book_ethusd\",\"event\":\"data\"}");
 
@@ -30,7 +30,7 @@ namespace CurrencyIngestion.Test.CurrencyIngestion.API.Test.Handlers
 
             BidSimulationHandler handler = new(
                 exchangeSimulationServiceMock.Object,
-                currencyRepositoryMock.Object,
+                orderBookRepositoryMock.Object,
                 exchangeSimulationRepositoryMock.Object
                 );
 

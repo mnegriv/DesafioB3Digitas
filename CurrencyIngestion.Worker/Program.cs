@@ -1,7 +1,6 @@
 using CurrencyIngestion.Common;
 using CurrencyIngestion.Data;
 using CurrencyIngestion.Service;
-using CurrencyIngestion.Worker.MessageHandler;
 using CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler;
 
 namespace CurrencyIngestion.Worker
@@ -15,17 +14,17 @@ namespace CurrencyIngestion.Worker
                 {
                     services.AddHostedService<WorkerService>();
                     services.AddMemoryCache();
-                    services.AddSingleton<ICurrencyRepository>(c =>
+                    services.AddSingleton<IOrderBookRepository>(c =>
                     {
                         var config = c.GetRequiredService<IConfiguration>();
                         string connString = config.GetConnectionString(Constants.CURRENCY_CONNECTIONSTRING_NAME)
                             ?? throw new KeyNotFoundException($"The connection string was not informed for '{Constants.CURRENCY_CONNECTIONSTRING_NAME}'");
 
-                        return new CurrencySQLServerRepository(connString);
+                        return new OrderBookSQLServerRepository(connString);
                     });
                     services.AddSingleton<ICurrencySummaryCalculator, CurrencySummaryCalculator>();
                     services.AddSingleton<IBitstampMessageHandlerFactory, BitstampMessageHandlerFactory>();
-                    services.AddSingleton<ICurrencyPoolingAdapter, CurrencyPoolingAdapter>();
+                    services.AddSingleton<ILiveOrderBookPoolingAdapter, LiveOrderBookPoolingAdapter>();
                 })
                 .Build();
 

@@ -21,17 +21,17 @@ namespace CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler
             var channel = OrderBook.FromJson(message)?.Channel;
 
             var memoryCache = serviceProvider.GetRequiredService<IMemoryCache>();
-            var currencyRepository = serviceProvider.GetRequiredService<ICurrencyRepository>();
+            var orderBookRepository = serviceProvider.GetRequiredService<IOrderBookRepository>();
             var currencySummaryCalculator = serviceProvider.GetRequiredService<ICurrencySummaryCalculator>();
 
             if (channel == CurrencyPair.BTCUSD.ToOrderBookChannel())
             {
-                return new BtcBitstampMessageHandler(memoryCache, currencyRepository, currencySummaryCalculator);
+                return new BtcBitstampMessageHandler(memoryCache, orderBookRepository, currencySummaryCalculator);
             }
 
             if (channel == CurrencyPair.ETHUSD.ToOrderBookChannel())
             {
-                return new EthBitstampMessageHandler(memoryCache, currencyRepository, currencySummaryCalculator);
+                return new EthBitstampMessageHandler(memoryCache, orderBookRepository, currencySummaryCalculator);
             }
 
             throw new InvalidOperationException($"This message channel is not supported: {channel}");

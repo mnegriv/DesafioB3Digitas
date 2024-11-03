@@ -4,11 +4,11 @@ using System.Data.SqlClient;
 
 namespace CurrencyIngestion.Data
 {
-    public class CurrencySQLServerRepository : ICurrencyRepository
+    public class OrderBookSQLServerRepository : IOrderBookRepository
     {
         private readonly string connString;
 
-        public CurrencySQLServerRepository(string connString)
+        public OrderBookSQLServerRepository(string connString)
         {
             this.connString = connString ?? throw new ArgumentNullException(nameof(connString));
         }

@@ -11,22 +11,22 @@ namespace CurrencyIngestion.API.Handlers
     public class BidSimulationHandler : IRequestHandler<BidSimulationCommand, Result?>
     {
         private readonly IExchangeSimulationService exchangeSimulationService;
-        private readonly ICurrencyRepository currencyRepository;
+        private readonly IOrderBookRepository orderBookRepository;
         private readonly IExchangeSimulationRepository exchangeSimulationRepository;
 
         public BidSimulationHandler(
             IExchangeSimulationService exchangeSimulationService,
-            ICurrencyRepository currencyRepository,
+            IOrderBookRepository orderBookRepository,
             IExchangeSimulationRepository exchangeSimulationRepository)
         {
             this.exchangeSimulationService = exchangeSimulationService;
-            this.currencyRepository = currencyRepository;
+            this.orderBookRepository = orderBookRepository;
             this.exchangeSimulationRepository = exchangeSimulationRepository;
         }
 
         public async Task<Result?> Handle(BidSimulationCommand request, CancellationToken cancellationToken)
         {
-            string latestOrderBookJson = await currencyRepository.GetLatest(request.Currency);
+            string latestOrderBookJson = await orderBookRepository.GetLatest(request.Currency);
 
             var bidRequest = request.Request;
 

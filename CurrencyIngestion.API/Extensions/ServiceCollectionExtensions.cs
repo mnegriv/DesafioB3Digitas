@@ -9,13 +9,13 @@ namespace CurrencyIngestion.API.Extensions
         public static void AddServices(this IServiceCollection services)
         {
             services.AddSingleton<IExchangeSimulationService, ExchangeSimulationService>();
-            services.AddSingleton<ICurrencyRepository>(c =>
+            services.AddSingleton<IOrderBookRepository>(c =>
             {
                 var config = c.GetRequiredService<IConfiguration>();
                 string connString = config.GetConnectionString(Constants.CURRENCY_CONNECTIONSTRING_NAME)
                     ?? throw new KeyNotFoundException($"The connection string was not informed for '{Constants.CURRENCY_CONNECTIONSTRING_NAME}'");
 
-                return new CurrencySQLServerRepository(connString);
+                return new OrderBookSQLServerRepository(connString);
             });
             services.AddSingleton<IExchangeSimulationRepository>(c =>
             {
