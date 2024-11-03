@@ -19,7 +19,7 @@ namespace CurrencyIngestion.Data
             container = database.GetContainer(containerName);
         }
 
-        public async Task Save(OrderBook orderBook, CurrencyPair currency)
+        public async Task Save(OrderBook orderBook)
         {
             orderBook.Id = Guid.NewGuid().ToString();
             OrderBookDto dto = (OrderBookDto)orderBook;
@@ -29,20 +29,19 @@ namespace CurrencyIngestion.Data
                 );
         }
 
-        public async Task<IEnumerable<OrderBook>> GetAll(CurrencyPair currency)
+        public async Task<IEnumerable<OrderBook>> GetAll(string channelName)
         {
-            string channelName = currency.ToOrderBookChannel();
             string queryText = $"SELECT * FROM orderBook WHERE orderBook.channel = '{channelName}'";
             var results = await QueryMany<OrderBook>(queryText);
 
             return results;
         }
 
-        public async Task<OrderBook?> GetLatest(CurrencyPair currency)
+        public async Task<OrderBook?> GetLatest(string channelName)
         {
             string queryText = $@"
                 SELECT * FROM orderBook 
-                WHERE orderBook.channel ='{currency.ToOrderBookChannel()}' 
+                WHERE orderBook.channel = '{channelName}' 
                 ORDER BY orderBook._ts DESC OFFSET 0 LIMIT 1";
 
             var result = await QueryFirstOrDefault<OrderBook>(queryText);

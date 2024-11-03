@@ -22,7 +22,7 @@ namespace CurrencyIngestion.Test.CurrencyIngestion.API.Test.Handlers
             var exchangeSimulationRepositoryMock = new Mock<IExchangeSimulationRepository>();
 
             orderBookRepositoryMock
-                .Setup(x => x.GetLatest(CurrencyPair.BTCUSD))
+                .Setup(x => x.GetLatest(It.IsAny<string>()))
                 .ReturnsAsync(new OrderBook
                 {
                     Id = Guid.Empty.ToString(),

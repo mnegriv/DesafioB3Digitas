@@ -1,5 +1,6 @@
 ﻿using CurrencyIngestion.API.Payload;
 using CurrencyIngestion.Common.Enums;
+using CurrencyIngestion.Common.Extensions;
 using CurrencyIngestion.Data;
 using CurrencyIngestion.Domain;
 using CurrencyIngestion.Domain.Extensions;
@@ -28,7 +29,9 @@ namespace CurrencyIngestion.API.Handlers
         {
             var bidRequest = request.Request;
 
-            OrderBook? latestOrderBook = await orderBookRepository.GetLatest(request.Currency);
+            string channelName = request.Currency.ToOrderBookChannel();
+
+            OrderBook? latestOrderBook = await orderBookRepository.GetLatest(channelName);
 
             if (latestOrderBook is null)
                 return null;

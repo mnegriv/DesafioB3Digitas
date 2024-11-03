@@ -1,6 +1,6 @@
 ﻿using CurrencyIngestion.Domain;
 using CurrencyIngestion.Worker;
-using CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler;
+using CurrencyIngestion.Worker.MessageHandler;
 using Moq;
 
 namespace CurrencyIngestion.Test.CurrencyIngestion.Worker.Test.MessageHandler
@@ -30,15 +30,11 @@ namespace CurrencyIngestion.Test.CurrencyIngestion.Worker.Test.MessageHandler
                     UpdateTime: DateTime.MinValue
                     )));
 
-            var messageHandlerFactoryMock = new Mock<IBitstampMessageHandlerFactory>();
-            messageHandlerFactoryMock
-                .Setup(x => x.Create(It.IsAny<string>()))
-                .Returns(messageHandlerMock.Object);
-
             CancellationTokenSource cts = new();
 
             var adapter = new LiveOrderBookPoolingAdapter(
-                messageHandlerFactoryMock.Object, memoryCacheFixture.CreateMemoryCache());
+                memoryCacheFixture.CreateMemoryCache(),
+                messageHandlerMock.Object);
 
             Task poolTask = adapter.Pool(cts.Token);
 

@@ -1,25 +1,24 @@
-﻿using CurrencyIngestion.Common;
-using CurrencyIngestion.Common.Enums;
+﻿using CurrencyIngestion.Common.Enums;
 using CurrencyIngestion.Data;
 using CurrencyIngestion.Domain;
 using CurrencyIngestion.Service;
-using CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler;
+using CurrencyIngestion.Worker.MessageHandler;
 using Microsoft.Extensions.Caching.Memory;
 using Moq;
 
-namespace CurrencyIngestion.Test.CurrencyIngestion.Worker.Test.MessageHandler.BitstampMessageHandler
+namespace CurrencyIngestion.Test.CurrencyIngestion.Worker.Test.MessageHandler
 {
-    public class BtcBitstampMessageHandlerTests : IClassFixture<MemoryCacheFixture>
+    public class BitstampMessageHandlerTests : IClassFixture<MemoryCacheFixture>
     {
         private readonly MemoryCacheFixture memoryCacheFixture;
 
-        public BtcBitstampMessageHandlerTests(MemoryCacheFixture memoryCacheFixture)
+        public BitstampMessageHandlerTests(MemoryCacheFixture memoryCacheFixture)
         {
             this.memoryCacheFixture = memoryCacheFixture;
         }
 
         [Fact]
-        public async Task Given_BtcBitstampMessage_When_HandlerMessage_Then_MessageHandlerRan()
+        public async Task Given_BitstampMessage_When_HandlerMessage_Then_MessageHandlerRan()
         {
             IMemoryCache memoryCache = memoryCacheFixture.CreateMemoryCache();
             var orderBookRepositoryMock = new Mock<IOrderBookRepository>();
@@ -32,7 +31,7 @@ namespace CurrencyIngestion.Test.CurrencyIngestion.Worker.Test.MessageHandler.Bi
                     It.IsAny<IEnumerable<OrderBook?>?>()
                     ))
                 .Returns(new CurrencySummary(
-                    $"{CurrencyPair.BTCUSD}",
+                    "Test Currency",
                     HighestPrice: 200m,
                     LowestPrice: 100m,
                     AveragePriceCurrent: 150m,
@@ -41,7 +40,7 @@ namespace CurrencyIngestion.Test.CurrencyIngestion.Worker.Test.MessageHandler.Bi
                     DateTime.MinValue
                     ));
 
-            var messageHandler = new BtcBitstampMessageHandler(
+            var messageHandler = new BitstampMessageHandler(
                 memoryCache,
                 orderBookRepositoryMock.Object,
                 currencySummaryCalculatorMock.Object
@@ -52,10 +51,10 @@ namespace CurrencyIngestion.Test.CurrencyIngestion.Worker.Test.MessageHandler.Bi
             await messageHandler.Handle(message);
 
             orderBookRepositoryMock
-                .Verify(x => x.GetAll(CurrencyPair.BTCUSD), Times.Once);
+                .Verify(x => x.GetAll(It.IsAny<string>()), Times.Once);
 
             orderBookRepositoryMock
-                .Verify(x => x.Save(It.IsAny<OrderBook>(), It.IsAny<CurrencyPair>()), Times.Once);
+                .Verify(x => x.Save(It.IsAny<OrderBook>()), Times.Once);
 
             currencySummaryCalculatorMock
                 .Verify(x => x.CalculateSummary(

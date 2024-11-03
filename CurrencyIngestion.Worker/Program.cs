@@ -2,7 +2,7 @@ using Azure.Identity;
 using CurrencyIngestion.Common;
 using CurrencyIngestion.Data;
 using CurrencyIngestion.Service;
-using CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler;
+using CurrencyIngestion.Worker.MessageHandler;
 using Microsoft.Azure.Cosmos;
 
 namespace CurrencyIngestion.Worker
@@ -16,24 +16,23 @@ namespace CurrencyIngestion.Worker
                 {
                     services.AddHostedService<WorkerService>();
                     services.AddMemoryCache();
-                    services.AddSingleton<IOrderBookRepository>(c =>
+                    services.AddSingleton(provider =>
                     {
-                        var config = c.GetRequiredService<IConfiguration>();
+                        var config = provider.GetRequiredService<IConfiguration>();
                         string connString = config.GetConnectionString(Constants.CURRENCY_CONNECTIONSTRING_NAME)
                             ?? throw new KeyNotFoundException($"The connection string was not informed for '{Constants.CURRENCY_CONNECTIONSTRING_NAME}'"); ;
 
-                        //TODO colocar switch
-                        //var config = c.GetRequiredService<IConfiguration>();
-                        //string connString = config.GetConnectionString(Constants.CURRENCY_CONNECTIONSTRING_NAME)
-                        //    ?? throw new KeyNotFoundException($"The connection string was not informed for '{Constants.CURRENCY_CONNECTIONSTRING_NAME}'");
-
-                        //return new OrderBookSQLServerRepository(connString);
-
                         CosmosClient cosmosClient = new(connString);
+
+                        return cosmosClient;
+                    });
+                    services.AddSingleton<IOrderBookRepository>(provider =>
+                    {
+                        var cosmosClient = provider.GetRequiredService<CosmosClient>();
                         return new OrderBookCosmosRepository(cosmosClient);
                     });
                     services.AddSingleton<ICurrencySummaryCalculator, CurrencySummaryCalculator>();
-                    services.AddSingleton<IBitstampMessageHandlerFactory, BitstampMessageHandlerFactory>();
+                    services.AddSingleton<IBitstampMessageHandler, BitstampMessageHandler>();
                     services.AddSingleton<ILiveOrderBookPoolingAdapter, LiveOrderBookPoolingAdapter>();
                 })
                 .Build();

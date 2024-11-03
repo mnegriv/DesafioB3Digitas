@@ -1,6 +1,6 @@
 ﻿using CurrencyIngestion.Domain;
 
-namespace CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler
+namespace CurrencyIngestion.Worker.MessageHandler
 {
     public interface IBitstampMessageHandler
     {

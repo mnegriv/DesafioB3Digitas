@@ -5,10 +5,10 @@ namespace CurrencyIngestion.Data
 {
     public interface IOrderBookRepository
     {
-        Task Save(OrderBook orderBook, CurrencyPair currency);
+        Task Save(OrderBook orderBook);
 
-        Task<IEnumerable<OrderBook>> GetAll(CurrencyPair currency);
+        Task<IEnumerable<OrderBook>> GetAll(string channelName);
 
-        Task<OrderBook?> GetLatest(CurrencyPair currency);
+        Task<OrderBook?> GetLatest(string channelName);
     }
 }

@@ -1,7 +1,7 @@
 ﻿using CurrencyIngestion.Common.Enums;
 using CurrencyIngestion.Common.Extensions;
 using CurrencyIngestion.Domain;
-using CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler;
+using CurrencyIngestion.Worker.MessageHandler;
 using Microsoft.Extensions.Caching.Memory;
 using System.Net.WebSockets;
 
@@ -9,7 +9,7 @@ namespace CurrencyIngestion.Worker
 {
     public class LiveOrderBookPoolingAdapter : ILiveOrderBookPoolingAdapter
     {
-        private readonly IBitstampMessageHandlerFactory messageHandlerFactory;
+        private readonly IBitstampMessageHandler messageHandler;
         private readonly IMemoryCache memoryCache;
 
         private static readonly MemoryCacheEntryOptions cacheEntryOptions = new()
@@ -19,10 +19,11 @@ namespace CurrencyIngestion.Worker
         };
 
         public LiveOrderBookPoolingAdapter(
-            IBitstampMessageHandlerFactory messageHandlerFactory, IMemoryCache memoryCache)
+            IMemoryCache memoryCache,
+            IBitstampMessageHandler messageHandler)
         {
-            this.messageHandlerFactory = messageHandlerFactory;
             this.memoryCache = memoryCache;
+            this.messageHandler = messageHandler;
         }
 
         public async Task Pool(CancellationToken stoppingToken)
@@ -84,8 +85,6 @@ namespace CurrencyIngestion.Worker
         {
             if (messageReceived.Equals(string.Empty))
                 return;
-
-            var messageHandler = messageHandlerFactory.Create(messageReceived);
 
             var currencySummary = await messageHandler.Handle(messageReceived);
 
