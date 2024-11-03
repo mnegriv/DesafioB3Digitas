@@ -1,6 +1,8 @@
 ﻿using CurrencyIngestion.Common.Enums;
+using CurrencyIngestion.Domain;
 using Dapper;
 using System.Data.SqlClient;
+using System.Text.Json;
 
 namespace CurrencyIngestion.Data
 {
@@ -13,7 +15,7 @@ namespace CurrencyIngestion.Data
             this.connString = connString ?? throw new ArgumentNullException(nameof(connString));
         }
 
-        public async Task Save(string orderBook, CurrencyPair currency)
+        public async Task Save(OrderBook orderBook, CurrencyPair currency)
         {
             string schema = GetSchema(currency);
 
@@ -21,12 +23,14 @@ namespace CurrencyIngestion.Data
 
             connection.Open();
 
-            string command = $"INSERT INTO {schema}.OrderBook (Content) OUTPUT inserted.Identifier VALUES (@orderBook)";
+            string content = JsonSerializer.Serialize(orderBook);
 
-            await connection.ExecuteScalarAsync(command, new { orderBook });
+            string command = $"INSERT INTO {schema}.OrderBook (Content) OUTPUT inserted.Identifier VALUES (@content)";
+
+            await connection.ExecuteScalarAsync(command, new { content });
         }
 
-        public async Task<IEnumerable<string>> GetAll(CurrencyPair currency)
+        public async Task<IEnumerable<OrderBook>> GetAll(CurrencyPair currency)
         {
             string schema = GetSchema(currency);
 
@@ -34,12 +38,14 @@ namespace CurrencyIngestion.Data
 
             connection.Open();
 
-            string command = $"SELECT Content FROM {schema}.OrderBook;";
+            string command = $"SELECT Identifier, Content FROM {schema}.OrderBook;";
 
-            return await connection.QueryAsync<string>(command);
+            var queryResult = await connection.QueryAsync<(string identifier, string content)>(command);
+
+            return queryResult.Select(ParseOrderBook);
         }
 
-        public async Task<string> GetLatest(CurrencyPair currency)
+        public async Task<OrderBook?> GetLatest(CurrencyPair currency)
         {
             string schema = GetSchema(currency);
 
@@ -47,9 +53,11 @@ namespace CurrencyIngestion.Data
 
             connection.Open();
 
-            string command = $"SELECT TOP 1 Content FROM {schema}.OrderBook ORDER BY Time Desc;";
+            string command = $"SELECT TOP 1 Identifier, Content FROM {schema}.OrderBook ORDER BY Time Desc;";
 
-            return await connection.QuerySingleAsync<string>(command);
+            var queryResult = await connection.QuerySingleAsync<(string identifier, string content)>(command);
+
+            return ParseOrderBook(queryResult);
         }
 
         private static string GetSchema(CurrencyPair currency)
@@ -60,6 +68,12 @@ namespace CurrencyIngestion.Data
                 CurrencyPair.ETHUSD => "eth",
                 _ => throw new InvalidOperationException("Invalid currency"),
             };
+        }
+        private static OrderBook ParseOrderBook((string identifier, string content) result)
+        {
+            OrderBook ob = OrderBook.FromJson(result.content);
+            ob.Id = result.identifier;
+            return ob;
         }
     }
 }

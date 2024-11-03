@@ -4,12 +4,14 @@ namespace CurrencyIngestion.Domain
 {
     public class ExchangeSimulation
     {
-        public ExchangeSimulation(CurrencyPair currency, OperationType type)
+        public ExchangeSimulation(CurrencyPair currency, OperationType type, Guid identification)
         {
             Currency = currency;
             Type = type;
+            Identification = identification;
         }
 
+        public Guid Identification { get; set; }
         public CurrencyPair Currency { get; set; }
         public string CurrencyStr => Currency.ToString();
         public OperationType Type { get; set; }

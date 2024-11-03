@@ -7,7 +7,7 @@ namespace CurrencyIngestion.Service
     {
         public ExchangeSimulation SimulateAskOperation(CurrencyPair currency, decimal amountRequested, List<AskOperation> operations)
         {
-            ExchangeSimulation simulationModel = new(currency, OperationType.Ask);
+            ExchangeSimulation simulationModel = new(currency, OperationType.Ask, Guid.NewGuid());
 
             Queue<ExchangeOperation> operationQueue = new(operations.OrderBy(o => o.Price));
 
@@ -16,7 +16,7 @@ namespace CurrencyIngestion.Service
 
         public ExchangeSimulation SimulateBidOperation(CurrencyPair currency, decimal amountRequested, List<BidOperation> operations)
         {
-            ExchangeSimulation simulationModel = new(currency, OperationType.Bid);
+            ExchangeSimulation simulationModel = new(currency, OperationType.Bid, Guid.NewGuid());
 
             Queue<ExchangeOperation> operationQueue = new(operations.OrderByDescending(o => o.Price));
 

@@ -15,7 +15,7 @@ namespace CurrencyIngestion.Worker
         private static readonly MemoryCacheEntryOptions cacheEntryOptions = new()
         {
             AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5),
-            SlidingExpiration = TimeSpan.FromSeconds(10)
+            SlidingExpiration = TimeSpan.FromMinutes(2)
         };
 
         public LiveOrderBookPoolingAdapter(

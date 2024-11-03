@@ -35,9 +35,9 @@ namespace CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler
             CurrencySummary currencySummaryBtc = currencySummaryCalculator.CalculateSummary(
                 orderBook,
                 previousOrderBookBtc,
-                cumulativeResults.Select(r => OrderBook.FromJson(r)));
+                cumulativeResults);
 
-            _ = orderBookRepository.Save(messageReceived, CurrencyPair.BTCUSD);
+            _ = orderBookRepository.Save(orderBook, CurrencyPair.BTCUSD);
 
             SetOrderBookToCache(orderBook);
 

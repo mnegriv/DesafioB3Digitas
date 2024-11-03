@@ -54,7 +54,7 @@ namespace CurrencyIngestion.Test.CurrencyIngestion.Worker.Test.MessageHandler.Bi
                 .Verify(x => x.GetAll(CurrencyPair.ETHUSD), Times.Once);
 
             orderBookRepositoryMock
-                .Verify(x => x.Save(It.IsAny<string>(), It.IsAny<CurrencyPair>()), Times.Once);
+                .Verify(x => x.Save(It.IsAny<OrderBook>(), It.IsAny<CurrencyPair>()), Times.Once);
 
             currencySummaryCalculatorMock
                 .Verify(x => x.CalculateSummary(

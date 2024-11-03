@@ -26,11 +26,9 @@ namespace CurrencyIngestion.API.Handlers
 
         public async Task<Result?> Handle(AskSimulationCommand request, CancellationToken cancellationToken)
         {
-            string latestOrderBookJson = await orderBookRepository.GetLatest(request.Currency);
-
             var askRequest = request.Request;
 
-            var latestOrderBook = OrderBook.FromJson(latestOrderBookJson);
+            OrderBook? latestOrderBook = await orderBookRepository.GetLatest(request.Currency);
 
             if (latestOrderBook is null)
                 return null;
@@ -43,7 +41,7 @@ namespace CurrencyIngestion.API.Handlers
                 askOperations);
 
             Result result = new(
-                Guid.NewGuid(),
+                simulationModel.Identification,
                 simulationModel.TotalAmount,
                 OperationType.Ask,
                 simulationModel.TotalPrice,

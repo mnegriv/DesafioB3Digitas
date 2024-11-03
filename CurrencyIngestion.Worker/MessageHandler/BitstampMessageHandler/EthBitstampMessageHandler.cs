@@ -35,9 +35,9 @@ namespace CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler
             CurrencySummary currencySummaryEth = currencySummaryCalculator.CalculateSummary(
                 orderBook,
                 previoussOrderBookEth,
-                cumulativeResults.Select(r => OrderBook.FromJson(r)));
+                cumulativeResults);
 
-            _ = orderBookRepository.Save(messageReceived, CurrencyPair.ETHUSD);
+            _ = orderBookRepository.Save(orderBook, CurrencyPair.ETHUSD);
 
             SetOrderBookToCache(orderBook);
 
