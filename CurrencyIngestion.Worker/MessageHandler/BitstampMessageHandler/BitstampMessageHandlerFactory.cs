@@ -1,4 +1,6 @@
-﻿using CurrencyIngestion.Data;
+﻿using CurrencyIngestion.Common.Enums;
+using CurrencyIngestion.Common.Extensions;
+using CurrencyIngestion.Data;
 using CurrencyIngestion.Domain;
 using CurrencyIngestion.Service;
 using Microsoft.Extensions.Caching.Memory;
@@ -22,12 +24,12 @@ namespace CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler
             var currencyRepository = serviceProvider.GetRequiredService<ICurrencyRepository>();
             var currencySummaryCalculator = serviceProvider.GetRequiredService<ICurrencySummaryCalculator>();
 
-            if (channel == Common.Constants.BTC_CHANNEL_IDENTIFIER)
+            if (channel == CurrencyPair.BTCUSD.ToOrderBookChannel())
             {
                 return new BtcBitstampMessageHandler(memoryCache, currencyRepository, currencySummaryCalculator);
             }
 
-            if (channel == Common.Constants.ETH_CHANNEL_IDENTIFIER)
+            if (channel == CurrencyPair.ETHUSD.ToOrderBookChannel())
             {
                 return new EthBitstampMessageHandler(memoryCache, currencyRepository, currencySummaryCalculator);
             }

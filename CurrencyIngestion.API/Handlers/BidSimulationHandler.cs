@@ -8,7 +8,7 @@ using MediatR;
 
 namespace CurrencyIngestion.API.Handlers
 {
-    public class BidSimulationHandler : IRequestHandler<BidSimulationCommand, Result>
+    public class BidSimulationHandler : IRequestHandler<BidSimulationCommand, Result?>
     {
         private readonly IExchangeSimulationService exchangeSimulationService;
         private readonly ICurrencyRepository currencyRepository;
@@ -24,7 +24,7 @@ namespace CurrencyIngestion.API.Handlers
             this.exchangeSimulationRepository = exchangeSimulationRepository;
         }
 
-        public async Task<Result> Handle(BidSimulationCommand request, CancellationToken cancellationToken)
+        public async Task<Result?> Handle(BidSimulationCommand request, CancellationToken cancellationToken)
         {
             string latestOrderBookJson = await currencyRepository.GetLatest(request.Currency);
 
@@ -47,7 +47,7 @@ namespace CurrencyIngestion.API.Handlers
                 simulationModel.TotalAmount,
                 OperationType.Bid,
                 simulationModel.TotalPrice,
-                simulationModel.Operations.Select(o => new List<string> { $"{o.Price}", $"{o.Amount}" }).ToList());
+                simulationModel.Operations);
 
             await exchangeSimulationRepository.Save(simulationModel);
 

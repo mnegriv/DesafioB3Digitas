@@ -1,4 +1,5 @@
 ﻿using CurrencyIngestion.Common.Enums;
+using CurrencyIngestion.Domain;
 
 namespace CurrencyIngestion.API.Payload
 {
@@ -7,5 +8,5 @@ namespace CurrencyIngestion.API.Payload
         decimal Amount,
         OperationType OperationTye,
         decimal Price,
-        List<List<string>> CalculationItens);
+        IEnumerable<ExchangeOperation> CalculationItens);
 }

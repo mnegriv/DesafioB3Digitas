@@ -2,6 +2,7 @@
 using System.Text.Json;
 using System.Text;
 using CurrencyIngestion.Common.Enums;
+using CurrencyIngestion.Common.Extensions;
 using CurrencyIngestion.Worker.Model;
 
 namespace CurrencyIngestion.Worker
@@ -28,16 +29,11 @@ namespace CurrencyIngestion.Worker
             if (WebSocket is null)
                 throw new InvalidOperationException("The web socket client was not initialized");
 
-            string name = currencyPair switch
-            {
-                CurrencyPair.BTCUSD => Common.Constants.BTC_CHANNEL_IDENTIFIER,
-                CurrencyPair.ETHUSD => Common.Constants.ETH_CHANNEL_IDENTIFIER,
-                _ => throw new InvalidOperationException("This currency pair is not allowed"),
-            };
+            string channelName = currencyPair.ToOrderBookChannel();
 
             ChannelSubscription subscription = new()
             {
-                Data = new(name)
+                Data = new(channelName)
             };
 
             string message = JsonSerializer.Serialize(subscription);

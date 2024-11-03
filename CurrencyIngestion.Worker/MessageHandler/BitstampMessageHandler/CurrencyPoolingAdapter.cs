@@ -1,5 +1,5 @@
-﻿using CurrencyIngestion.Common;
-using CurrencyIngestion.Common.Enums;
+﻿using CurrencyIngestion.Common.Enums;
+using CurrencyIngestion.Common.Extensions;
 using CurrencyIngestion.Domain;
 using Microsoft.Extensions.Caching.Memory;
 using System.Net.WebSockets;
@@ -101,9 +101,12 @@ namespace CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler
 
                 Console.WriteLine("***Summary***");
 
-                if (memoryCache.Get(Constants.BTC_CHANNEL_IDENTIFIER) is not CurrencySummary btcSummary)
+                string btcChannel = CurrencyPair.BTCUSD.ToOrderBookChannel();
+                string ethChannel = CurrencyPair.ETHUSD.ToOrderBookChannel();
+
+                if (memoryCache.Get(btcChannel) is not CurrencySummary btcSummary)
                 {
-                    Console.WriteLine(Constants.BTC_CHANNEL_IDENTIFIER);
+                    Console.WriteLine(btcChannel);
                     Console.WriteLine("Not yet computed");
                 }
                 else
@@ -111,9 +114,9 @@ namespace CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler
                     Console.WriteLine(btcSummary.ToString());
                 }
 
-                if (memoryCache.Get(Constants.ETH_CHANNEL_IDENTIFIER) is not CurrencySummary ethSummary)
+                if (memoryCache.Get(ethChannel) is not CurrencySummary ethSummary)
                 {
-                    Console.WriteLine(Constants.ETH_CHANNEL_IDENTIFIER);
+                    Console.WriteLine(ethChannel);
                     Console.WriteLine("Not yet computed");
                 }
                 else

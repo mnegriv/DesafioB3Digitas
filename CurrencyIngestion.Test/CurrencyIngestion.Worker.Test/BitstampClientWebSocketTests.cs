@@ -1,5 +1,6 @@
 ﻿using CurrencyIngestion.Common;
 using CurrencyIngestion.Common.Enums;
+using CurrencyIngestion.Common.Extensions;
 using CurrencyIngestion.Domain;
 using CurrencyIngestion.Worker;
 
@@ -27,7 +28,7 @@ namespace CurrencyIngestion.Test.CurrencyIngestion.Worker.Test
 
             Assert.NotNull(orderBook);
             Assert.NotNull(orderBook.Data);
-            Assert.Equal(Constants.BTC_CHANNEL_IDENTIFIER, orderBook.Channel);
+            Assert.Equal(CurrencyPair.BTCUSD.ToOrderBookChannel(), orderBook.Channel);
         }
 
         [Fact]
@@ -49,7 +50,7 @@ namespace CurrencyIngestion.Test.CurrencyIngestion.Worker.Test
 
             Assert.NotNull(orderBook);
             Assert.NotNull(orderBook.Data);
-            Assert.Equal(Constants.ETH_CHANNEL_IDENTIFIER, orderBook.Channel);
+            Assert.Equal(CurrencyPair.ETHUSD.ToOrderBookChannel(), orderBook.Channel);
         }
     }
 }
