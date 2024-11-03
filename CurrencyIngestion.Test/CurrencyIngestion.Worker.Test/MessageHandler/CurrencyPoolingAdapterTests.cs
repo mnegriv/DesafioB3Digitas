@@ -1,4 +1,5 @@
 ﻿using CurrencyIngestion.Domain;
+using CurrencyIngestion.Worker;
 using CurrencyIngestion.Worker.MessageHandler.BitstampMessageHandler;
 using Moq;
 
@@ -36,7 +37,7 @@ namespace CurrencyIngestion.Test.CurrencyIngestion.Worker.Test.MessageHandler
 
             CancellationTokenSource cts = new();
 
-            var adapter = new CurrencyPoolingAdapter(
+            var adapter = new LiveOrderBookPoolingAdapter(
                 messageHandlerFactoryMock.Object, memoryCacheFixture.CreateMemoryCache());
 
             Task poolTask = adapter.Pool(cts.Token);
