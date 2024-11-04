@@ -1,6 +1,4 @@
-﻿using CurrencyIngestion.Common.Enums;
-using CurrencyIngestion.Common.Extensions;
-using CurrencyIngestion.Data.Dto;
+﻿using CurrencyIngestion.Data.Dto;
 using CurrencyIngestion.Domain;
 using Microsoft.Azure.Cosmos;
 
@@ -37,7 +35,7 @@ namespace CurrencyIngestion.Data
             return results;
         }
 
-        public async Task<OrderBook?> GetLatest(string channelName)
+        public async Task<OrderBook> GetLatest(string channelName)
         {
             string queryText = $@"
                 SELECT * FROM orderBook 
@@ -46,7 +44,7 @@ namespace CurrencyIngestion.Data
 
             var result = await QueryFirstOrDefault<OrderBook>(queryText);
 
-            return result;
+            return result ?? new OrderBook();
         }
 
         private async Task<List<T>> QueryMany<T>(string queryText)

@@ -9,6 +9,6 @@ namespace CurrencyIngestion.Data
 
         Task<IEnumerable<OrderBook>> GetAll(string channelName);
 
-        Task<OrderBook?> GetLatest(string channelName);
+        Task<OrderBook> GetLatest(string channelName);
     }
 }
