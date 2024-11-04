@@ -29,8 +29,12 @@ namespace CurrencyIngestion.Data
 
         public async Task<IEnumerable<OrderBook>> GetAll(string channelName)
         {
-            string queryText = $"SELECT * FROM orderBook WHERE orderBook.channel = '{channelName}'";
-            var results = await QueryMany<OrderBook>(queryText);
+            string queryText = $"SELECT * FROM orderBook WHERE orderBook.channel = @channelName";
+            var parameterizedQuery = new QueryDefinition(
+                query: queryText
+            ).WithParameter("@channelName", channelName);
+
+            var results = await QueryMany<OrderBook>(parameterizedQuery);
 
             return results;
         }
@@ -39,19 +43,21 @@ namespace CurrencyIngestion.Data
         {
             string queryText = $@"
                 SELECT * FROM orderBook 
-                WHERE orderBook.channel = '{channelName}' 
+                WHERE orderBook.channel = @channelName 
                 ORDER BY orderBook._ts DESC OFFSET 0 LIMIT 1";
 
-            var result = await QueryFirstOrDefault<OrderBook>(queryText);
+            var parameterizedQuery = new QueryDefinition(
+                query: queryText
+            ).WithParameter("@channelName", channelName);
+
+            var result = await QueryFirstOrDefault<OrderBook>(parameterizedQuery);
 
             return result ?? new OrderBook();
         }
 
-        private async Task<List<T>> QueryMany<T>(string queryText)
+        private async Task<List<T>> QueryMany<T>(QueryDefinition queryDefinition)
         {
-            using FeedIterator<T> feed = container.GetItemQueryIterator<T>(
-                queryText: queryText
-            );
+            using FeedIterator<T> feed = container.GetItemQueryIterator<T>(queryDefinition);
 
             List<T> items = new();
 
@@ -66,11 +72,10 @@ namespace CurrencyIngestion.Data
             return items;
         }
 
-        private async Task<T?> QueryFirstOrDefault<T>(string queryText) where T : class
+        private async Task<T?> QueryFirstOrDefault<T>(QueryDefinition parameterizedQuery)
+            where T : class
         {
-            using FeedIterator<T> feed = container.GetItemQueryIterator<T>(
-                queryText: queryText
-            );
+            using FeedIterator<T> feed = container.GetItemQueryIterator<T>(parameterizedQuery);
 
             while (feed.HasMoreResults)
             {

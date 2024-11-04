@@ -106,6 +106,7 @@ namespace CurrencyIngestion.Worker
                 Console.WriteLine("***Summary***");
 
                 PrintChannelSummary(CurrencyPair.BTCUSD);
+                Console.WriteLine("");
                 PrintChannelSummary(CurrencyPair.ETHUSD);
             }
             catch (IOException)
