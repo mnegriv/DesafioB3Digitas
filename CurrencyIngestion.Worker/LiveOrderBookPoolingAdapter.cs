@@ -18,14 +18,18 @@ namespace CurrencyIngestion.Worker
             SlidingExpiration = TimeSpan.FromMinutes(2)
         };
 
-        public LiveOrderBookPoolingAdapter(
-            IMemoryCache memoryCache,
-            IBitstampMessageHandler messageHandler)
+        public LiveOrderBookPoolingAdapter(IMemoryCache memoryCache, IBitstampMessageHandler messageHandler)
         {
             this.memoryCache = memoryCache;
             this.messageHandler = messageHandler;
         }
 
+        /// <summary> 
+        /// Maintains a persistent WebSocket connection, listening for its messages, and manages reconnections upon WebSocket exceptions. 
+        /// The WebSocket will listen to messages of BTC/USD and ETH/USD currency pairs
+        /// </summary>
+        /// <param name="stoppingToken"></param>
+        /// <returns></returns>
         public async Task Pool(CancellationToken stoppingToken)
         {
             using var bitstampClientWebSocket = new BitstampClientWebSocket();

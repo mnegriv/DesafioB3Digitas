@@ -7,6 +7,10 @@ using CurrencyIngestion.Worker.Model;
 
 namespace CurrencyIngestion.Worker
 {
+    /// <summary>
+    /// This class represents a Bitstamp WebSocket integration, providing connection, currency subscribing and message receiving actions
+    /// Reference <see cref="https://www.bitstamp.net/websocket/v2/"/>
+    /// </summary>
     public class BitstampClientWebSocket : IDisposable
     {
         private static readonly Uri bitstampUri = new("wss://ws.bitstamp.net");

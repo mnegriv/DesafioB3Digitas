@@ -25,6 +25,12 @@ namespace CurrencyIngestion.API.Handlers
             this.exchangeSimulationRepository = exchangeSimulationRepository;
         }
 
+        /// <summary>
+        /// Handles a 'Bid' simulation request received from the controller
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>A Task with the simulation data results</returns>
         public async Task<Result?> Handle(BidSimulationCommand request, CancellationToken cancellationToken)
         {
             var bidRequest = request.Request;

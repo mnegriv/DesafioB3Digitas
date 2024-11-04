@@ -4,6 +4,14 @@ namespace CurrencyIngestion.Service
 {
     public class CurrencySummaryCalculator : ICurrencySummaryCalculator
     {
+        /// <summary>
+        /// Based on the current and previous <see cref="OrderBook"/> data, and the historic cumulative results as well,
+        /// calculates the summary values of a currency
+        /// </summary>
+        /// <param name="orderBookCurrent">The current order book data</param>
+        /// <param name="orderBookPrevious">The previous obtained order book data</param>
+        /// <param name="cumulativeOrders">The historic cumulative results</param>
+        /// <returns>The calculated summary value</returns>
         public CurrencySummary CalculateSummary(OrderBook? orderBookCurrent, OrderBook? orderBookPrevious, IEnumerable<OrderBook?>? cumulativeOrders)
         {
             List<decimal> currentPrices = GetAllPrices(orderBookCurrent);

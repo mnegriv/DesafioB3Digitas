@@ -5,6 +5,10 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace CurrencyIngestion.Worker.MessageHandler
 {
+    /// <summary>
+    /// This class is responsible to handle the Bitstamp WebSocket messages
+    /// It will provide the <see cref="CurrencySummary"/> of the given currency pair
+    /// </summary>
     public class BitstampMessageHandler : IBitstampMessageHandler
     {
         private readonly IMemoryCache memoryCache;
